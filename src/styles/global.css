@@ -2,6 +2,10 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
+@view-transition {
+    navigation: auto;
+}
+
 @theme {
     --color-navy-100: #001f3f;
 }
