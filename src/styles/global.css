@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+    --color-navy-100: #001f3f;
+}
+
+@layer base {
+    .view-transition-pageTitle {
+        view-transition-name: page-title;
+    }
+    .view-transition-pageSummary {
+        view-transition-name: page-summary;
+    }
+    .view-transition-profileImg {
+        view-transition-name: profile-image;
+    }
+    .view-transition-topMenu {
+        view-transition-name: top-menu;
+    }
+    .view-transition-pageContent {
+        view-transition-name: page-content;
+    }
+    .view-transition-pageContent-1 {
+        view-transition-name: page-content-1;
+    }
+
+    html {
+        height: 100%;
+    }
+    h1 {
+        @apply text-4xl font-bold;
+
+        @media (width >= theme(--breakpoint-md)) {
+            @apply text-5xl;
+        }
+    }
+    h2 {
+        @apply text-4xl font-bold;
+    }
+    h3 {
+        @apply text-3xl font-bold;
+    }
+    h4 {
+        @apply text-2xl font-bold;
+    }
+    button {
+        &:hover {
+            @apply cursor-pointer;
+        }
+    }
+}
+
+@layer components {
+    .bg-angular {
+        background: linear-gradient(
+            90deg,
+            oklch(63.32% 0.24 31.68) 0%,
+            oklch(69.02% 0.277 332.77) 50%,
+            oklch(53.18% 0.28 296.97) 100%
+        );
+    }
+    .link {
+        position: relative;
+
+        &:hover {
+            &:after {
+                width: 0;
+            }
+        }
+
+        &:after {
+            transition: width 0.3s ease-in-out;
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: currentColor;
+            @apply rounded;
+        }
+    }
+    .timeline {
+        list-style-type: none;
+        position: relative;
+        padding: 0;
+
+        > * {
+            position: relative;
+            padding-left: 2rem;
+
+            &:after {
+                content: '';
+                position: absolute;
+                top: 0.75rem;
+                left: 0.5rem;
+                width: 1rem;
+                height: 1rem;
+                background-color: currentColor;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            &:not(:last-child) {
+                padding-bottom: 2rem;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    top: 0.5rem;
+                    left: 0.5rem;
+                    width: 2px;
+                    height: 100%;
+                    background-color: currentColor;
+                    transform: translateX(-50%);
+                }
+            }
+        }
+    }
+}
+
+@utility container {
+    @media (width >= theme(--breakpoint-xl)) {
+        max-width: 64rem;
+    }
+}

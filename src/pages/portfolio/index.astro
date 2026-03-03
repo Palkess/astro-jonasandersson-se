@@ -1,0 +1,51 @@
+---
+import PageTitle from '$lib/components/base/page-title/page-title.svelte';
+import ProjectTeaser from '$lib/components/composites/project-teaser/project-teaser.svelte';
+import SubPage from '$lib/components/composites/sub-page/sub-page.svelte';
+import Layout from '$lib/layouts/Layout.astro';
+import { m } from '$lib/paraglide/messages';
+import type { Project } from '$lib/types/project';
+
+const projects: Project[] = [
+    {
+        slug: 'olandsstuguthyrning-com',
+        title: 'Olandsstuguthyrning.com',
+        descriptionTitle: 'Landningssida för uthyrning av stugor på Öland',
+        description:
+            'Helen och Lars hyr ut sina stugor året runt på Öland och behövde en egen sida för att visa upp sina stugor och kunna dirigera hyrgästerna till sin bokningspartner för att skicka en bokningsförfrågan. Samt kunna erbjuda sina hyrgäster lite nyttig information kring området, som fågelskådning.',
+        image: '/images/olandsstuguthyrning.jpg',
+        technologies: ['TypeScript', 'SvelteKit', 'Tailwind', 'MySQL', 'IIS'],
+        status: 'private',
+        url: 'https://olandsstuguthyrning.com',
+        releaseDate: '2025-03-18',
+        translations: {
+            en: {
+                title: 'Olandsstuguthyrning.com',
+                descriptionTitle: 'Landing page for cottage rental on Öland',
+                description:
+                    'Helen and Lars rent out their cottages all year round on Öland and needed their own page to showcase their cottages and be able to direct the tenants to their booking partner to send a booking request. And be able to offer their tenants some useful information about the area, such as bird watching.'
+            }
+        }
+    }
+];
+---
+
+<Layout title="Portfolio">
+    <main class="flex flex-col items-center justify-center p-2">
+        <div class="container">
+            <PageTitle>
+                {m.navigation_portfolio()}
+            </PageTitle>
+
+            <SubPage class="mb-8">
+                <p class="text-lg">
+                    {m.portfolio_read_about()}
+                </p>
+            </SubPage>
+
+            <ul class="grid grid-cols-1 lg:grid-cols-2">
+                {projects.map((project) => <ProjectTeaser project={project} />)}
+            </ul>
+        </div>
+    </main>
+</Layout>

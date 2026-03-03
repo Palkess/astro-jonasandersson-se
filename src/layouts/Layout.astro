@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+import SocialLinks from '$lib/components/base/social-links/social-links.svelte';
+import LanguageLinks from '$lib/components/base/language-links/language-links.svelte';
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="generator" content={Astro.generator} />
+        <title>
+            {
+                title
+                    ? `${title} | Jonas Andersson - Fullstack webbutvecklare | Svelte, Angular, Vue | Tillgänglighet i benmärgen`
+                    : 'Jonas Andersson - Fullstack webbutvecklare | Svelte, Angular, Vue | Tillgänglighet i benmärgen'
+            }
+        </title>
+    </head>
+    <body class="bg-navy-100 flex flex-col justify-between h-full text-white py-3 px-4">
+        <div class="h-full contents">
+            <div
+                class="view-transition-topMenu container mx-auto mb-12 flex items-center justify-between gap-4">
+                <div class="flex gap-4">
+                    <SocialLinks />
+                </div>
+
+                <div class="flex gap-4">
+                    <LanguageLinks pageUrl={Astro.url} />
+                </div>
+            </div>
+
+            <slot />
+
+            <footer>
+                <div class="container mx-auto my-8">
+                    <p class="text-center text-sm">
+                        Copyright © {new Date().getFullYear()} Jonas Andersson
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+{
+    "$schema": "https://inlang.com/schema/inlang-message-format",
+    "hello_world": "Hello, {name} from en!",
+
+    "page_sub_title": "Fullstack web developer | Svelte, Angular, Vue | Accessibility through and through",
+    "profile_img_alt": "Image of Jonas with short hair, medium-long full beard and a green shirt.",
+
+    "navigation_home": "Home",
+    "navigation_about": "Who am I?",
+    "navigation_portfolio": "Portfolio",
+    "navigation_blog": "Blog",
+    "navigation_back": "Go back",
+
+    "about_summary": "Hi, my name is Jonas 👋 I am a full-stack web developer from Öland/Kalmar, Sweden, with a passion for creating smart, seamless, and stylish web solutions. After many years in the IT industry and with broad expertise in the entire development process—from design to production—I have extensive experience in building websites and applications that are user-friendly, visually appealing, and efficient.",
+    "about_skills": "Expertise",
+
+    "portfolio_used_tech": "Used technologies",
+    "portfolio_goto_webpage": "Go to webpage",
+    "portfolio_read_about": "Here you can read about some of the projects that I have been involved in developing."
+}
