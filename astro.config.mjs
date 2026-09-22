@@ -3,9 +3,8 @@ import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 
-import { paraglideVitePlugin } from '@inlang/paraglide-js';
-import node from '@astrojs/node';
-
+// Static output (Astro's default): every page is prerendered to `dist/` and
+// served by GitHub Pages from the jonasandersson.se custom domain, so no `base`.
 // https://astro.build/config
 export default defineConfig({
     site: 'https://jonasandersson.se',
@@ -22,21 +21,11 @@ export default defineConfig({
     integrations: [svelte()],
 
     vite: {
-        plugins: [
-            tailwindcss(),
-            paraglideVitePlugin({
-                project: './project.inlang',
-                outdir: './src/paraglide',
-                strategy: ['url', 'cookie', 'baseLocale']
-            })
-        ],
+        plugins: [tailwindcss()],
         resolve: {
             alias: {
                 $lib: new URL('./src', import.meta.url).pathname
             }
         }
-    },
-
-    output: 'server',
-    adapter: node({ mode: 'standalone' })
+    }
 });

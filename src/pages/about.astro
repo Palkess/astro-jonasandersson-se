@@ -1,11 +1,10 @@
 ---
+/** Swedish about page — `/about/`. English is served by `[locale]/[slug].astro`. */
 import Layout from '$lib/layouts/Layout.astro';
 import AboutPage from '$lib/components/pages/about-page/about-page.astro';
-import { getLocale } from '$lib/paraglide/runtime';
 import { useTranslations } from '$lib/i18n';
 
-// Paraglide still owns locale detection until the static cut-over (task 6).
-const locale = getLocale();
+const locale = 'sv' as const;
 const t = useTranslations(locale);
 ---
 

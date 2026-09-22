@@ -8,36 +8,44 @@ Consult this file when navigating the codebase, proposing structural changes, or
 
 ## Overview
 
-Personal portfolio/CV website for Jonas Andersson. Built with Astro 5 (SSR) + Svelte 5 + Tailwind CSS 4 + Paraglide JS. Deployed as a Node.js server (not static).
+Personal portfolio/CV website for Jonas Andersson. Built with Astro 5 (static output) + Svelte 5 + Tailwind CSS 4, bilingual (Swedish/English) through Astro's built-in i18n routing and TypeScript dictionaries in `src/i18n/`. Deployed as static files.
 
 ## Runtime Mode
 
-**Server-side rendered (SSR).** `astro.config.mjs` sets `output: 'server'` with `@astrojs/node` adapter in `standalone` mode. This means every request is handled by a live Node.js process — there is no prerendered static output.
+**Static.** `astro.config.mjs` uses Astro's default static output — no adapter, no middleware. `npm run build` prerenders every page to `dist/` as `<route>/index.html`, and any static host can serve it; the intended host is GitHub Pages on the `jonasandersson.se` custom domain (`site` is set, no `base`). There is no server at runtime, so there are no redirects or rewrites, and render-time values such as the footer's year are fixed at build time.
 
-Reason: Paraglide's URL-based locale strategy requires server-side request interception via middleware. See `decisions.md`.
+No Svelte component is hydrated (no `client:` directives), so pages ship no framework JS.
 
-## Request Pipeline
+Until 2026-09 the site was SSR with `@astrojs/node` and Paraglide middleware. See ADR-006 / ADR-007 in `decisions.md`.
+
+## Build Pipeline
 
 ```
-Request
-  └─ Astro middleware (src/middleware.ts)
-       └─ paraglideMiddleware()       ← locale detection from URL / cookie / baseLocale
-            └─ Page render
-                 └─ Layout.astro      ← lang, title, canonical, hreflang, language switcher, top menu, footer, slot
-                      └─ Page content (Astro + Svelte components)
+astro build
+  └─ Route file (src/pages/…)              ← fixes the locale: 'sv' in root files, getStaticPaths in [locale]/…
+       └─ Layout.astro                      ← lang, title, canonical, hreflang, language switcher, top menu, footer, slot
+            └─ Page body (src/components/pages/…)   ← text + links from useTranslations(locale) / routeHref(locale, …)
+                 └─ Composites / base / foundation   ← receive localized text and hrefs as props
+  → dist/<route>/index.html
 ```
+
+The locale flows down as a prop. Nothing reads it from a request, cookie or global.
 
 ## Pages
 
 | Route | File | Description |
 |-------|------|-------------|
 | `/` | `src/pages/index.astro` → `home-page` | Landing page: name, subtitle, skills, profile image, nav |
-| `/about` | `src/pages/about/index.astro` → `about-page` | About page: career timeline, biography |
-| `/portfolio` | `src/pages/portfolio/index.astro` → `portfolio-page` | Portfolio listing: project teasers |
+| `/about/` | `src/pages/about.astro` → `about-page` | About page: career timeline, biography |
+| `/portfolio/` | `src/pages/portfolio.astro` → `portfolio-page` | Portfolio listing: project teasers |
+| `/en/` | `src/pages/[locale]/index.astro` → `home-page` | Home page in every non-default locale |
+| `/en/about/`, `/en/portfolio/` | `src/pages/[locale]/[slug].astro` → `about-page` / `portfolio-page` | Content pages in every non-default locale; slugs from `routeSlugs` |
 
-Route files are thin wrappers: they read the locale (currently Paraglide's `getLocale()`) and render the matching page body from `src/components/pages/` inside `<Layout {locale} routeKey="…" title={…}>`. From `locale` + `routeKey`, `Layout.astro` derives `<html lang>`, the translated `<title>`, the canonical URL, the `hreflang` alternates (resolved against `site`), the OG tags and the language switcher's links, which point at the same page in the other language.
+Swedish route files set `const locale = 'sv'`. The `[locale]` files generate the other locales with `getStaticPaths` over `locales` minus the default (constants the function needs are declared *inside* it, because Astro extracts `getStaticPaths` into its own chunk).
 
-There are no dynamic routes (`[slug].astro`) — portfolio item detail pages do not yet exist. See `bugs.md`.
+Route files are thin wrappers: they fix the locale and render the matching page body from `src/components/pages/` inside `<Layout {locale} routeKey="…" title={…}>`. From `locale` + `routeKey`, `Layout.astro` derives `<html lang>`, the translated `<title>`, the canonical URL, the `hreflang` alternates (resolved against `site`), the OG tags and the language switcher's links, which point at the same page in the other language.
+
+Portfolio item detail pages do not exist yet — `[locale]/[slug].astro` only serves the content pages. See `bugs.md` (SUSPECT-001).
 
 ## Component Hierarchy
 
@@ -61,14 +69,15 @@ Composites are assembled from Base components. Page bodies use composites, base 
 
 ## Internationalization
 
-- **Base locale:** Swedish (`sv`)
-- **Secondary locale:** English (`en`)
-- **Detection order:** URL path → cookie → base locale
-- **Message source:** `messages/en.json` and `messages/sv.json`
-- **Compiled output:** `src/paraglide/` (auto-generated, never edit)
-- **Usage:** `m.key()` for short strings; separate language components for long-form content
+- **Default locale:** Swedish (`sv`), unprefixed: `/`, `/about/`, `/portfolio/`
+- **Other locale:** English (`en`), prefixed: `/en/`, `/en/about/`, `/en/portfolio/`
+- **Detection:** none. The URL alone decides the language (Astro i18n, `prefixDefaultLocale: false`); no cookie, no `Accept-Language`, no client-side redirect. See ADR-007.
+- **Routing table:** `src/i18n/routes.ts` (`locales`, `routeSlugs`, `localeTags`). The order of `locales` is the language switcher's display order.
+- **Strings:** `src/i18n/ui.{sv,en}.ts` (UI) and `src/i18n/projects.{sv,en}.ts` (portfolio), read with `useTranslations(locale)` / `getProjectText(locale, slug)`.
+- **Links:** `routeHref(locale, key, param?)`, via Astro's `getRelativeLocaleUrl`. Always emits a trailing slash.
+- **Long-form content:** separate Swedish/English components (ADR-002).
 
-URL structure: Swedish content at `/`, English content at `/en/` (Paraglide URL strategy).
+`messages/`, `project.inlang/` and the Paraglide dependency are leftovers from the SSR setup. Nothing in `src/` reads them any more.
 
 ## Styling
 
@@ -103,9 +112,10 @@ No Astro content collections. Data is inline:
 | `$lib` alias | `tsconfig.json` + `astro.config.mjs` | Maps `$lib/*` → `./src/*` |
 | `twMerge` | `tailwind-merge` (npm) | Merge Tailwind class props safely |
 | `getSkillClassColors()` | `src/utils/getSkillClassColors.ts` | Maps tech name → Tailwind color classes |
-| `m.*()` | `$lib/paraglide/messages.js` | i18n message functions |
-| `localizeHref()` | `$lib/paraglide/runtime` | Prefix hrefs with locale path |
-| `getLocale()` | `$lib/paraglide/runtime` | Get current locale at runtime |
+| `useTranslations(locale)` | `$lib/i18n` | UI strings for a locale |
+| `getProjectText(locale, slug)` | `$lib/i18n` | Portfolio project texts for a locale |
+| `routeHref(locale, key, param?)` | `$lib/i18n` | Localized internal link (trailing slash) |
+| `alternateLinks(key, param?)` | `$lib/i18n` | `hreflang` alternates for a route (used by `Layout.astro`) |
 
 ---
 

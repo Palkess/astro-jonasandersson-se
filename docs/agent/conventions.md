@@ -75,25 +75,25 @@ Use `$lib` for all internal imports. `$lib` maps to `./src/`.
 ```ts
 import { twMerge } from 'tailwind-merge';
 import type { Project } from '$lib/types/project';
-import { m } from '$lib/paraglide/messages.js';
+import { useTranslations } from '$lib/i18n';
 ```
 
 Never use relative paths (`../../`) to cross component directories.
 
 ## Internationalization
 
-- Short UI strings: use `m.key()` message functions imported from `$lib/paraglide/messages.js`
+- **The locale is a prop.** Route files fix it (`const locale = 'sv'` in root files, `getStaticPaths` in `src/pages/[locale]/…`) and pass it to `<Layout>` and the page body. Never read it from a global, a cookie or the request.
+- Short UI strings: `useTranslations(locale)` from `$lib/i18n`. Add new keys to `src/i18n/ui.sv.ts` first — its shape is the `UiStrings` type, so `ui.en.ts` fails type-checking until it matches.
 - Long-form content (experience timelines, bio paragraphs): create separate language-specific components (e.g. `swedish-experience.svelte` / `english-experience.svelte`)
-- All internal links must go through `localizeHref()` from `$lib/paraglide/runtime`
-- Locale detection: use `getLocale()` from `$lib/paraglide/runtime`
-- Page bodies (`src/components/pages/`) resolve text and links from their `locale` prop with `useTranslations(locale)` and `routeHref(locale, key, param?)` from `$lib/i18n`. They never import `$lib/paraglide`.
-- Components in the foundation, base and composites tiers never resolve the locale or build links themselves — no runtime imports from `$lib/i18n` or `$lib/paraglide` there (type-only imports such as `ProjectText` are fine). The page body or layout passes already-localized `href`s and translated labels in as props (e.g. `backHref`/`backLabel` on `sub-page`, `languages` on `language-links`). The one exception is the locale-split long-form components (ADR-002), which *are* a language.
+- All internal links must go through `routeHref(locale, key, param?)` from `$lib/i18n`. Never hand-write an internal path.
+- Page bodies (`src/components/pages/`) resolve text and links from their `locale` prop with `useTranslations(locale)` and `routeHref(locale, key, param?)`.
+- Components in the foundation, base and composites tiers never resolve the locale or build links themselves — no runtime imports from `$lib/i18n` there (type-only imports such as `ProjectText` are fine). The page body or layout passes already-localized `href`s and translated labels in as props (e.g. `backHref`/`backLabel` on `sub-page`, `languages` on `language-links`). The one exception is the locale-split long-form components (ADR-002), which *are* a language.
 
 ```astro
 ---
-import { getLocale } from '$lib/paraglide/runtime';
+const { locale } = Astro.props;
 ---
-{getLocale() === 'sv' ? <SwedishContent /> : <EnglishContent />}
+{locale === 'sv' ? <SwedishContent /> : <EnglishContent />}
 ```
 
 ## Image Handling
@@ -112,7 +112,7 @@ TypeScript strict mode is enabled — see `tsconfig.json`. All component props m
 - **Do not use relative paths across component directories** — We tried this; it breaks path portability when files move and is inconsistent with the rest of the codebase. Use `$lib/...` always.
 - **Do not use Svelte 4 Options API** — The project is Svelte 5 throughout. Mixing syntax causes subtle reactivity bugs and inconsistency. Use runes.
 - **Do not add Tailwind classes without `twMerge` when a `class` prop is accepted** — Without merging, callers cannot override base styles and conflicting utilities silently apply both, producing undefined behavior.
-- **Do not hardcode i18n strings in component markup** — English-only hardcoded text breaks the Swedish locale. Either use `m.key()` or create language-specific components.
+- **Do not hardcode i18n strings in component markup** — English-only hardcoded text breaks the Swedish locale. Either use `useTranslations(locale)` or create language-specific components.
 
 ---
 

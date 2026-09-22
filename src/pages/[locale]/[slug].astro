@@ -1,0 +1,45 @@
+---
+/**
+ * Every non-Swedish content page: `/en/about/` and `/en/portfolio/`. One file
+ * rather than one per page, because the only thing that varies is which page
+ * body renders — and the slugs come out of `routeSlugs` rather than being
+ * repeated as file names. Swedish versions are `src/pages/about.astro` etc.
+ */
+import Layout from '$lib/layouts/Layout.astro';
+import AboutPage from '$lib/components/pages/about-page/about-page.astro';
+import PortfolioPage from '$lib/components/pages/portfolio-page/portfolio-page.astro';
+import { useTranslations } from '$lib/i18n';
+import { defaultLocale, locales, routeSlugs, type Locale } from '$lib/i18n/routes';
+
+export function getStaticPaths() {
+    /*
+     * Declared inside the function on purpose: Astro extracts `getStaticPaths`
+     * into its own chunk, so it cannot see module-scope consts from this file.
+     */
+    const contentRoutes = ['about', 'portfolio'] as const;
+
+    return locales
+        .filter((locale) => locale !== defaultLocale)
+        .flatMap((locale) =>
+            contentRoutes.map((routeKey) => ({
+                params: { locale, slug: routeSlugs[routeKey][locale] },
+                props: { locale, routeKey }
+            }))
+        );
+}
+
+interface Props {
+    locale: Locale;
+    routeKey: 'about' | 'portfolio';
+}
+
+const { locale, routeKey } = Astro.props;
+const t = useTranslations(locale);
+
+const title = { about: t.meta.aboutTitle, portfolio: t.meta.portfolioTitle }[routeKey];
+---
+
+<Layout {locale} {routeKey} {title}>
+    {routeKey === 'about' && <AboutPage {locale} />}
+    {routeKey === 'portfolio' && <PortfolioPage {locale} />}
+</Layout>

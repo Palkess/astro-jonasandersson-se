@@ -1,0 +1,22 @@
+---
+/** Non-Swedish home pages — `/en/`. Swedish is `src/pages/index.astro`. */
+import Layout from '$lib/layouts/Layout.astro';
+import HomePage from '$lib/components/pages/home-page/home-page.astro';
+import { defaultLocale, locales, type Locale } from '$lib/i18n';
+
+export function getStaticPaths() {
+    return locales
+        .filter((locale) => locale !== defaultLocale)
+        .map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+interface Props {
+    locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<Layout {locale} routeKey="home">
+    <HomePage {locale} />
+</Layout>

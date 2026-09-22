@@ -10,7 +10,7 @@ Consult this file when onboarding to this project or working in an unfamiliar pa
 
 | Technology | Version | Role |
 |------------|---------|------|
-| [Astro](https://astro.build) | 5.x | Application framework, routing, SSR, build tooling |
+| [Astro](https://astro.build) | 5.x | Application framework, routing, built-in i18n routing, static build |
 | [Svelte](https://svelte.dev) | 5.x | UI component framework (runes API) |
 | [Tailwind CSS](https://tailwindcss.com) | 4.x | Utility-first CSS, CSS-first config via `@theme` |
 | [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) | 2.x | i18n — compile-time message extraction, runtime locale routing |
@@ -21,7 +21,6 @@ Consult this file when onboarding to this project or working in an unfamiliar pa
 
 | Package | Purpose |
 |---------|---------|
-| `@astrojs/node` | SSR adapter — outputs standalone Node.js server |
 | `@astrojs/svelte` | Astro integration for Svelte components |
 | `@tailwindcss/vite` | Tailwind v4 Vite plugin |
 | `@tailwindcss/forms` | Tailwind plugin: form element resets |
@@ -35,7 +34,7 @@ Consult this file when onboarding to this project or working in an unfamiliar pa
 
 ## What to Know Before Contributing
 
-- **Astro 5**: Familiarity with Astro's component model (`.astro` files, frontmatter, `<slot>`), routing, and SSR mode
+- **Astro 5**: Familiarity with Astro's component model (`.astro` files, frontmatter, `<slot>`), file-based routing with `getStaticPaths`, static output, and the built-in `i18n` routing (`astro:i18n`)
 - **Svelte 5 runes**: The project exclusively uses the new runes API (`$props`, `$state`, `$bindable`, `{#snippet}`, `{@render}`). Knowledge of Svelte 4 Options API is not sufficient
 - **Tailwind CSS v4**: Config is CSS-first (`@theme` in global.css), not JS config. Syntax differs significantly from v3
 - **Paraglide JS**: Messages are compiled to TypeScript — message keys are type-safe functions, not strings. All locale-aware routing goes through `localizeHref()`

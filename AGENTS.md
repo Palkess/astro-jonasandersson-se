@@ -1,6 +1,6 @@
 # jonasandersson.se — Agent Instructions
 
-Personal portfolio and CV website for Jonas Andersson, a Swedish fullstack web developer. Built with Astro 5 (SSR) + Svelte 5 + Tailwind CSS 4 + Paraglide JS (Swedish/English). Deployed as a Node.js server.
+Personal portfolio and CV website for Jonas Andersson, a Swedish fullstack web developer. Built with Astro 5 (static output) + Svelte 5 + Tailwind CSS 4, bilingual (Swedish/English) via Astro's built-in i18n routing and TypeScript dictionaries in `src/i18n/`. Builds to static files, intended for GitHub Pages.
 
 ---
 
@@ -46,7 +46,7 @@ Each component lives in its own folder: `component-name/component-name.svelte`, 
 
 **`$lib` alias.** All internal imports use `$lib/...` (maps to `./src/`). Never use relative paths across directories.
 
-**i18n.** Short strings: `m.key()` from `$lib/paraglide/messages.js`. Long-form content: separate Swedish/English Svelte components. All internal links: `localizeHref()` from `$lib/paraglide/runtime`. Page bodies (`src/components/pages/`) get text and links from `useTranslations(locale)` / `routeHref(locale, key)` in `$lib/i18n`; lower-tier components have no runtime imports from `$lib/i18n` or Paraglide (types only) and receive localized hrefs and labels as props.
+**i18n.** The locale is a prop, fixed by the route file and passed down — never read from a global. Short strings: `useTranslations(locale)` from `$lib/i18n` (dictionaries in `src/i18n/ui.{sv,en}.ts`). Long-form content: separate Swedish/English Svelte components. All internal links: `routeHref(locale, key, param?)` from `$lib/i18n` — never a hand-written path. Page bodies (`src/components/pages/`) get text and links from `useTranslations(locale)` / `routeHref(locale, key)` in `$lib/i18n`; lower-tier components have no runtime imports from `$lib/i18n` or Paraglide (types only) and receive localized hrefs and labels as props.
 
 **Images.** Processed images: import from `$lib/assets/`, use `.src`. Static images: `public/images/`, reference by string path.
 
@@ -56,16 +56,16 @@ Each component lives in its own folder: `component-name/component-name.svelte`, 
 
 ## Architecture
 
-**Runtime:** SSR with `@astrojs/node` standalone. Every request goes through `src/middleware.ts` → Paraglide locale detection → page render.
+**Runtime:** Static. `astro build` prerenders every page to `dist/<route>/index.html`. No adapter, no middleware, no server at runtime (ADR-006).
 
 **Pages:**
-- `/` — `src/pages/index.astro`
-- `/about` — `src/pages/about/index.astro`
-- `/portfolio` — `src/pages/portfolio/index.astro`
+- `/`, `/about/`, `/portfolio/` — `src/pages/index.astro`, `about.astro`, `portfolio.astro` (Swedish, `const locale = 'sv'`)
+- `/en/` — `src/pages/[locale]/index.astro`
+- `/en/about/`, `/en/portfolio/` — `src/pages/[locale]/[slug].astro` (slugs from `routeSlugs` in `src/i18n/routes.ts`)
 
-No dynamic routes exist yet (portfolio detail pages are missing — see Known Issues).
+Each route file renders a page body from `src/components/pages/` inside `<Layout {locale} routeKey="…">`. Portfolio detail pages are still missing — see Known Issues.
 
-**Locales:** Swedish (`sv`) is the base locale (root paths). English (`en`) uses `/en/` prefix. Detection order: URL → cookie → base locale.
+**Locales:** Swedish (`sv`) is the default locale (unprefixed root paths). English (`en`) uses the `/en/` prefix. No detection: the URL alone decides the language — no cookie, no `Accept-Language`, no client-side redirect (ADR-007).
 
 **Data:** No content collections. Portfolio projects are a `Project[]` in `src/data/projects.ts` (locale-invariant data), with per-locale texts in `src/i18n/projects.{sv,en}.ts` keyed by slug. Career history is in the locale-split experience/history Svelte components.
 
@@ -74,15 +74,16 @@ No dynamic routes exist yet (portfolio detail pages are missing — see Known Is
 **Key utilities:**
 - `twMerge` — merge Tailwind classes safely
 - `getSkillClassColors()` — `src/utils/getSkillClassColors.ts` — maps tech name to color classes
-- `m.*()` — i18n message functions from `$lib/paraglide/messages.js`
-- `localizeHref()` — locale-aware link generation from `$lib/paraglide/runtime`
-- `getLocale()` — current locale from `$lib/paraglide/runtime`
+- `useTranslations(locale)` / `getProjectText(locale, slug)` — translated strings from `$lib/i18n`
+- `routeHref(locale, key, param?)` — localized internal links from `$lib/i18n` (trailing slash)
+- `alternateLinks(key)` — `hreflang` alternates, used by `Layout.astro`
 
 ---
 
 ## Architectural Decisions
 
-- **SSR (not static):** Required by Paraglide's URL-based locale middleware. Cannot use static hosting.
+- **Static output (ADR-006):** Built for GitHub Pages; no server, so no redirects or per-request logic. Replaced the original SSR + Paraglide middleware setup.
+- **Locale routing via Astro i18n (ADR-007):** Swedish unprefixed, English under `/en/`; locale fixed per route file and passed as a prop; no locale cookie or detection.
 - **Separate language components for long-form content:** Career timelines and biographies are separate `.svelte` files per locale rather than i18n keys, to keep content readable in source.
 - **Tailwind v4 via Vite plugin:** CSS-first config in `src/styles/global.css` using `@theme`/`@layer`/`@utility`. No `tailwind.config.js`.
 - **`$lib` alias:** SvelteKit convention imported into Astro for consistent, portable imports.

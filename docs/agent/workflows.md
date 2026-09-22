@@ -20,13 +20,9 @@ Starts the Astro dev server at `http://localhost:4321`. Hot module replacement i
 npm run build
 ```
 
-This is a two-step process:
-1. **Compile Paraglide messages** — `paraglide-js compile --project ./project.inlang --outdir ./src/paraglide`
-   Reads `messages/*.json` and generates TypeScript runtime in `src/paraglide/`.
-2. **Astro build** — `astro build`
-   Outputs a Node.js SSR server to `dist/`.
+`astro build` prerenders every page to static HTML in `dist/` (`dist/index.html`, `dist/about/index.html`, `dist/en/about/index.html`, …).
 
-The build will fail if the Paraglide compile step is skipped and `src/paraglide/` is missing or stale.
+The script still runs a leftover `paraglide-js compile` step first. Nothing in `src/` uses its output any more.
 
 ## Preview
 
@@ -34,7 +30,7 @@ The build will fail if the Paraglide compile step is skipped and `src/paraglide/
 npm run preview
 ```
 
-Serves the production build locally for testing before deployment.
+Serves `dist/` locally, like a static host would, for testing before deployment.
 
 ## Format
 
@@ -46,21 +42,17 @@ Runs Prettier on all files. Always run this before committing.
 
 ## Editing i18n Messages
 
-1. Edit `messages/en.json` or `messages/sv.json`
-2. Run `npm run build` (or trigger the compile step directly: `npx paraglide-js compile --project ./project.inlang --outdir ./src/paraglide`)
-3. The new message keys will be available as `m.key()` in source
+1. Add the key to `src/i18n/ui.sv.ts` (Swedish is the source of truth; its shape defines the `UiStrings` type).
+2. Add the English text at the same path in `src/i18n/ui.en.ts`. Until you do, `ui.en.ts` fails type-checking.
+3. Use it as `useTranslations(locale).<group>.<key>` in a page body, and pass it down as a prop.
 
-Adding a new key: add it to both locale files. Missing keys in either locale will cause Paraglide type errors.
+Portfolio project texts work the same way in `src/i18n/projects.{sv,en}.ts`, keyed by slug. No compile step is needed; they're plain TypeScript.
 
 ## Deployment
 
-No CI/CD is configured. Deployment is manual:
+The site is fully static: `npm run build` produces `dist/`, and any static file host can serve it as-is. No Node.js is needed at runtime. The intended host is GitHub Pages on the `jonasandersson.se` custom domain; `site` in `astro.config.mjs` is set to that and no `base` is used.
 
-1. Run `npm run build`
-2. Transfer `dist/` to the server
-3. Start with `node dist/server/entry.mjs` (Node.js standalone server)
-
-The server must have Node.js available. It is not a static site and cannot be deployed to static hosting.
+No CI/CD is configured yet.
 
 ---
 

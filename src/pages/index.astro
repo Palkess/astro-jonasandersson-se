@@ -1,10 +1,9 @@
 ---
+/** Swedish home page — `/`. English is served by `[locale]/index.astro`. */
 import Layout from '$lib/layouts/Layout.astro';
 import HomePage from '$lib/components/pages/home-page/home-page.astro';
-import { getLocale } from '$lib/paraglide/runtime';
 
-// Paraglide still owns locale detection until the static cut-over (task 6).
-const locale = getLocale();
+const locale = 'sv' as const;
 ---
 
 <Layout {locale} routeKey="home">
