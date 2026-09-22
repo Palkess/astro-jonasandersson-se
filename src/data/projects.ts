@@ -11,7 +11,7 @@ export const projects: Project[] = [
     {
         slug: 'olandsstuguthyrning-com',
         image: '/images/olandsstuguthyrning.jpg',
-        technologies: ['TypeScript', 'SvelteKit', 'Tailwind', 'MySQL', 'IIS'],
+        technologies: ['TypeScript', 'Astro', 'Svelte', 'Tailwind', 'GitHub Pages'],
         status: 'private',
         url: 'https://olandsstuguthyrning.com',
         releaseDate: '2025-03-18'
