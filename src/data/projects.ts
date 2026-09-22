@@ -15,5 +15,14 @@ export const projects: Project[] = [
         status: 'private',
         url: 'https://olandsstuguthyrning.com',
         releaseDate: '2025-03-18'
+    },
+    {
+        slug: 'helensfotvard-se',
+        image: '/images/helensfotvard.jpg',
+        technologies: ['TypeScript', 'Astro', 'Svelte', 'Tailwind', 'GitHub Pages'],
+        status: 'public',
+        githubUrl: 'https://github.com/Palkess/astro-helensfotvard-se',
+        url: 'https://helensfotvard.se',
+        releaseDate: '2026-03-28'
     }
 ];

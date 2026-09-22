@@ -1,5 +1,5 @@
 /** Every project slug. Adding a project means adding its slug here first. */
-export type ProjectSlug = 'olandsstuguthyrning-com';
+export type ProjectSlug = 'olandsstuguthyrning-com' | 'helensfotvard-se';
 
 /**
  * Locale-invariant facts about a portfolio project. Anything a human reads
