@@ -10,10 +10,11 @@ Personal portfolio and CV website for Jonas Andersson, a Swedish fullstack web d
 npm run dev        # dev server at http://localhost:4321
 npm run build      # static build to dist/
 npm run preview    # preview production build
+npm run check      # type-check .astro/.svelte/.ts (runs in CI)
 npm run format     # format all files with Prettier
 ```
 
-The build prerenders every page to static HTML in `dist/` — no compile step, no server.
+The build prerenders every page to static HTML in `dist/` — no compile step, no server. Every push to `main` deploys to GitHub Pages via `.github/workflows/deploy.yml` (check → build → deploy).
 
 ---
 
@@ -81,7 +82,7 @@ Each route file renders a page body from `src/components/pages/` inside `<Layout
 
 ## Architectural Decisions
 
-- **Static output (ADR-006):** Built for GitHub Pages; no server, so no redirects or per-request logic. Replaced the original SSR + Paraglide middleware setup.
+- **Static output (ADR-006):** Deployed to GitHub Pages by GitHub Actions on every push to `main`; no server, so no redirects or per-request logic. Replaced the original SSR + Paraglide middleware setup.
 - **Locale routing via Astro i18n (ADR-007):** Swedish unprefixed, English under `/en/`; locale fixed per route file and passed as a prop; no locale cookie or detection.
 - **Separate language components for long-form content:** Career timelines and biographies are separate `.svelte` files per locale rather than i18n keys, to keep content readable in source.
 - **Tailwind v4 via Vite plugin:** CSS-first config in `src/styles/global.css` using `@theme`/`@layer`/`@utility`. No `tailwind.config.js`.

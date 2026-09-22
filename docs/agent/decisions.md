@@ -107,6 +107,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 
 **Consequences:**
 - `npm run build` writes plain HTML to `dist/` (`/about/index.html`, `/en/about/index.html`, …). Any static host works; no Node.js process at runtime.
+- Deployed by GitHub Actions (`.github/workflows/deploy.yml`) on every push to `main`, after `astro check` and the build pass. Setup steps are in `workflows.md`.
 - Every URL has to exist as a generated file. There are no server-side redirects or rewrites — GitHub Pages can't do them — which is why existing URLs are kept as-is (ADR-007).
 - Anything computed at render time is frozen at build time (e.g. the footer's copyright year updates on redeploy).
 - Future dynamic features (contact form, API routes) would need a third-party service or a return to an adapter.

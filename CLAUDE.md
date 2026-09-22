@@ -10,10 +10,11 @@ Personal portfolio and CV website for Jonas Andersson, a Swedish fullstack web d
 npm run dev        # dev server at http://localhost:4321
 npm run build      # static build to dist/
 npm run preview    # preview production build
+npm run check      # type-check .astro/.svelte/.ts (runs in CI)
 npm run format     # format all files with Prettier
 ```
 
-The build prerenders every page to static HTML in `dist/` — no compile step, no server.
+The build prerenders every page to static HTML in `dist/` — no compile step, no server. Every push to `main` deploys to GitHub Pages via `.github/workflows/deploy.yml` (check → build → deploy).
 
 ---
 

@@ -21,6 +21,7 @@ Consult this file when onboarding to this project or working in an unfamiliar pa
 | Package | Purpose |
 |---------|---------|
 | `@astrojs/svelte` | Astro integration for Svelte components |
+| `@astrojs/check` | `astro check` — type-checks `.astro`/`.svelte`/`.ts` (`npm run check`, run in CI) |
 | `@tailwindcss/vite` | Tailwind v4 Vite plugin |
 | `@tailwindcss/forms` | Tailwind plugin: form element resets |
 | `@tailwindcss/typography` | Tailwind plugin: prose typography |
