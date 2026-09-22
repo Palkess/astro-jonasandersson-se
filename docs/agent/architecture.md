@@ -16,7 +16,7 @@ Personal portfolio/CV website for Jonas Andersson. Built with Astro 5 (static ou
 
 No Svelte component is hydrated (no `client:` directives), so pages ship no framework JS.
 
-Until 2026-09 the site was SSR with `@astrojs/node` and Paraglide middleware. See ADR-006 / ADR-007 in `decisions.md`.
+Until 2026-09 the site was SSR with `@astrojs/node`, and Paraglide JS handled i18n through middleware. See ADR-006 / ADR-007 in `decisions.md`.
 
 ## Build Pipeline
 
@@ -77,8 +77,6 @@ Composites are assembled from Base components. Page bodies use composites, base 
 - **Links:** `routeHref(locale, key, param?)`, via Astro's `getRelativeLocaleUrl`. Always emits a trailing slash.
 - **Long-form content:** separate Swedish/English components (ADR-002).
 
-`messages/`, `project.inlang/` and the Paraglide dependency are leftovers from the SSR setup. Nothing in `src/` reads them any more.
-
 ## Styling
 
 Tailwind CSS v4 loaded as a Vite plugin (not the Astro integration). Custom theme and utilities defined in `src/styles/global.css`:
@@ -103,7 +101,7 @@ No Astro content collections. Data is inline:
 
 - **Portfolio projects**: locale-invariant `Project[]` in `src/data/projects.ts`; titles and descriptions per locale in `src/i18n/projects.{sv,en}.ts`, keyed by slug (see `context.md`)
 - **Career history**: encoded in the locale-specific experience/history Svelte components
-- **i18n strings**: `messages/*.json`
+- **i18n strings**: `src/i18n/ui.{sv,en}.ts` (UI) and `src/i18n/projects.{sv,en}.ts` (portfolio texts)
 
 ## Key Utilities
 

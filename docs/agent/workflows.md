@@ -22,8 +22,6 @@ npm run build
 
 `astro build` prerenders every page to static HTML in `dist/` (`dist/index.html`, `dist/about/index.html`, `dist/en/about/index.html`, …).
 
-The script still runs a leftover `paraglide-js compile` step first. Nothing in `src/` uses its output any more.
-
 ## Preview
 
 ```bash

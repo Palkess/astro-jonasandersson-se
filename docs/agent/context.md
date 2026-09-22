@@ -12,10 +12,10 @@ Personal portfolio and CV website for **Jonas Andersson**, a Swedish fullstack w
 
 ## Locale Model
 
-- **Base locale:** `sv` (Swedish) — default language, served at root paths (`/`, `/about`, `/portfolio`)
-- **Secondary locale:** `en` (English) — served at prefixed paths (`/en/`, `/en/about`, `/en/portfolio`)
+- **Default locale:** `sv` (Swedish) — served at unprefixed root paths (`/`, `/about/`, `/portfolio/`)
+- **Secondary locale:** `en` (English) — served at prefixed paths (`/en/`, `/en/about/`, `/en/portfolio/`)
 - Swedish is the primary audience language; English is for international visitors
-- "Base locale" in Paraglide terms means: this locale is used when no locale signal is found in the URL or cookie
+- "Default locale" in Astro's i18n terms means: the locale whose pages have no URL prefix (`prefixDefaultLocale: false`). There is no detection or fallback — the URL alone decides the language
 
 ## The `Project` Type
 

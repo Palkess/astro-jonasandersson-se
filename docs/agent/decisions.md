@@ -39,8 +39,10 @@ Consult this file when making or evaluating architectural or design choices, or 
 **Consequences:**
 - Long-form content is readable in source — no interpolated strings to scan through
 - Adding content requires editing two files instead of two JSON keys
-- Component-level locale branching: `{getLocale() === 'sv' ? <SwedishContent /> : <EnglishContent />}`
+- Component-level locale branching: `{locale === 'sv' ? <SwedishContent /> : <EnglishContent />}`, where `locale` is the page body's prop
 - Risk of content drift between locales if one is updated without the other
+
+**Update (2026-09-22):** Still in force after the move away from Paraglide (ADR-007). Short strings now live in the TypeScript dictionaries `src/i18n/ui.{sv,en}.ts` instead of Paraglide message keys, and the branch uses the `locale` prop instead of `getLocale()`.
 
 ---
 
