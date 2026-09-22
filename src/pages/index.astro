@@ -7,6 +7,6 @@ import { getLocale } from '$lib/paraglide/runtime';
 const locale = getLocale();
 ---
 
-<Layout>
+<Layout {locale} routeKey="home">
     <HomePage {locale} />
 </Layout>

@@ -9,7 +9,8 @@
  * should the config ever need the table (e.g. for sitemap alternates).
  */
 
-export const locales = ['sv', 'en'] as const;
+/** Order is the language switcher's display order (English flag first, as before). */
+export const locales = ['en', 'sv'] as const;
 export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = 'sv';

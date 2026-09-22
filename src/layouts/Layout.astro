@@ -1,34 +1,76 @@
 ---
+/**
+ * The page shell: head metadata, top menu, footer. Every route renders through this.
+ *
+ * It derives `lang`, the canonical URL, the `hreflang` alternates and the
+ * language switcher from `locale` + `routeKey` rather than taking them as props,
+ * so a page can't ship metadata that disagrees with the URL it's served from.
+ */
 import '../styles/global.css';
 import SocialLinks from '$lib/components/base/social-links/social-links.svelte';
 import LanguageLinks from '$lib/components/base/language-links/language-links.svelte';
-import { getLocale, locales, localizeHref } from '$lib/paraglide/runtime';
+import {
+    alternateLinks,
+    locales,
+    routeHref,
+    useTranslations,
+    type Locale,
+    type RouteKey
+} from '$lib/i18n';
 
-const { title } = Astro.props;
+interface Props {
+    locale: Locale;
+    routeKey: RouteKey;
+    /** Page-specific title, prefixed to the site title. Omit for the site title alone. */
+    title?: string;
+    description?: string;
+}
 
-// Paraglide still resolves the switcher links until Layout knows its route (task 5).
+const { locale, routeKey, title, description } = Astro.props;
+const t = useTranslations(locale);
+
+const fullTitle = title ? `${title} | ${t.meta.siteTitle}` : t.meta.siteTitle;
+const canonical = new URL(routeHref(locale, routeKey), Astro.site).href;
+const alternates = alternateLinks(routeKey);
+const ogImage = new URL('/images/og-image.jpg', Astro.site).href;
+
+// The switcher points at the *same page* in the other language, not at its home page.
 const languages = locales.map((code) => ({
     code,
-    href: localizeHref(Astro.url.pathname, { locale: code }),
-    current: code === getLocale()
+    href: routeHref(code, routeKey),
+    current: code === locale
 }));
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="generator" content={Astro.generator} />
-        <title>
-            {
-                title
-                    ? `${title} | Jonas Andersson - Fullstack webbutvecklare | Svelte, Angular, Vue | Tillgänglighet i benmärgen`
-                    : 'Jonas Andersson - Fullstack webbutvecklare | Svelte, Angular, Vue | Tillgänglighet i benmärgen'
-            }
-        </title>
+        <title>{fullTitle}</title>
+        {description && <meta name="description" content={description} />}
+        <link rel="canonical" href={canonical} />
+        {
+            alternates.map((alternate) => (
+                <link
+                    rel="alternate"
+                    hreflang={alternate.hreflang}
+                    href={new URL(alternate.href, Astro.site).href}
+                />
+            ))
+        }
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={fullTitle} />
+        {description && <meta property="og:description" content={description} />}
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1869" />
+        <meta property="og:image:height" content="685" />
+        <meta name="twitter:card" content="summary_large_image" />
     </head>
     <body class="bg-navy-100 flex flex-col justify-between h-full text-white py-3 px-4">
         <div class="h-full contents">

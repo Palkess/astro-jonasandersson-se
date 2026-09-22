@@ -20,7 +20,9 @@ Add an entry when:
 
 ### BUG-001: HTML `lang` attribute hardcoded to `"en"`
 
-**Status:** Confirmed
+**Status:** Resolved
+
+**Resolved:** 2026-09-22 — `Layout.astro` now takes a required `locale` prop and renders `<html lang={locale}>` (`sv` / `en`). The locale comes from the route file, so the attribute always matches the page's language.
 
 **Location:** `src/layouts/Layout.astro`, `<html lang="en">`
 

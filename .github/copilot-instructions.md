@@ -91,7 +91,7 @@ No dynamic routes exist yet (portfolio detail pages are missing — see Known Is
 
 ## Known Issues
 
-**BUG-001 (Confirmed):** `<html lang="en">` in `src/layouts/Layout.astro` is hardcoded and does not change with locale. Swedish pages report incorrect language to screen readers and search engines. Fix: use `lang={getLocale()}`.
+**BUG-001 (Resolved 2026-09-22):** `<html lang>` used to be hardcoded to `"en"`. `Layout.astro` now renders `lang={locale}` from its required `locale` prop.
 
 **SUSPECT-001 (Suspected):** Portfolio links to `/portfolio/{slug}` but no `[slug].astro` dynamic route exists. These links currently 404.
 

@@ -23,7 +23,7 @@ Components follow a strict four-tier hierarchy:
 
 Never skip tiers — composites use base, base uses foundation. The one exception is the pages tier: a page body may use composites, base and foundation directly.
 
-Page bodies hold everything inside `<Layout>`. The route files in `src/pages/` stay thin: they pick the locale, set the `<Layout>` metadata and render one page body. Because the body only takes `locale`, the same component serves both `/about` and `/en/about`.
+Page bodies hold everything inside `<Layout>`. The route files in `src/pages/` stay thin: they pick the locale, pass `locale`, `routeKey`, a translated `title` (from `useTranslations(locale).meta`) and optionally a `description` to `<Layout>`, and render one page body. Never hardcode a title string in a route file. Because the body only takes `locale`, the same component serves both `/about` and `/en/about`.
 
 ## File Structure
 

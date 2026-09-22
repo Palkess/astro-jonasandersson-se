@@ -2,11 +2,13 @@
 import Layout from '$lib/layouts/Layout.astro';
 import PortfolioPage from '$lib/components/pages/portfolio-page/portfolio-page.astro';
 import { getLocale } from '$lib/paraglide/runtime';
+import { useTranslations } from '$lib/i18n';
 
 // Paraglide still owns locale detection until the static cut-over (task 6).
 const locale = getLocale();
+const t = useTranslations(locale);
 ---
 
-<Layout title="Portfolio">
+<Layout {locale} routeKey="portfolio" title={t.meta.portfolioTitle}>
     <PortfolioPage {locale} />
 </Layout>

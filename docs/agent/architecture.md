@@ -23,7 +23,7 @@ Request
   └─ Astro middleware (src/middleware.ts)
        └─ paraglideMiddleware()       ← locale detection from URL / cookie / baseLocale
             └─ Page render
-                 └─ Layout.astro      ← top menu, footer, slot
+                 └─ Layout.astro      ← lang, title, canonical, hreflang, language switcher, top menu, footer, slot
                       └─ Page content (Astro + Svelte components)
 ```
 
@@ -35,7 +35,7 @@ Request
 | `/about` | `src/pages/about/index.astro` → `about-page` | About page: career timeline, biography |
 | `/portfolio` | `src/pages/portfolio/index.astro` → `portfolio-page` | Portfolio listing: project teasers |
 
-Route files are thin wrappers: they read the locale (currently Paraglide's `getLocale()`) and render the matching page body from `src/components/pages/` inside `<Layout>`.
+Route files are thin wrappers: they read the locale (currently Paraglide's `getLocale()`) and render the matching page body from `src/components/pages/` inside `<Layout {locale} routeKey="…" title={…}>`. From `locale` + `routeKey`, `Layout.astro` derives `<html lang>`, the translated `<title>`, the canonical URL, the `hreflang` alternates (resolved against `site`), the OG tags and the language switcher's links, which point at the same page in the other language.
 
 There are no dynamic routes (`[slug].astro`) — portfolio item detail pages do not yet exist. See `bugs.md`.
 
