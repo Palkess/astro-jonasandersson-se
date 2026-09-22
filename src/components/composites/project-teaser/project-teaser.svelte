@@ -1,20 +1,21 @@
 <script lang="ts">
     import SkillsList from '$lib/components/base/skills-list/skills-list.svelte';
     import AppWindowIcon from '$lib/components/foundation/icons/AppWindowIcon.svelte';
-    import { getLocale, localizeHref } from '$lib/paraglide/runtime';
     import type { ProjectText } from '$lib/i18n/types';
     import type { Project } from '$lib/types/project';
 
     interface Props {
         project: Project;
         text: ProjectText;
+        /** Already-localized link to the project's detail page. */
+        href: string;
         class?: string;
     }
 
-    let { project, text, class: className = '' }: Props = $props();
+    let { project, text, href, class: className = '' }: Props = $props();
 </script>
 
-<a class="group" href={localizeHref(`/portfolio/${project.slug}`, { locale: getLocale() })}>
+<a class="group" {href}>
     <div
         class="relative top-0 flex flex-col overflow-hidden rounded-2xl bg-white text-black shadow-lg transition-all group-hover:-top-4">
         <img

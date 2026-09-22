@@ -4,7 +4,7 @@ import ProjectTeaser from '$lib/components/composites/project-teaser/project-tea
 import SubPage from '$lib/components/composites/sub-page/sub-page.svelte';
 import Layout from '$lib/layouts/Layout.astro';
 import { m } from '$lib/paraglide/messages';
-import { getLocale } from '$lib/paraglide/runtime';
+import { getLocale, localizeHref } from '$lib/paraglide/runtime';
 import { projects } from '$lib/data/projects';
 import { getProjectText } from '$lib/i18n';
 
@@ -19,7 +19,10 @@ const locale = getLocale();
                 {m.navigation_portfolio()}
             </PageTitle>
 
-            <SubPage class="mb-8">
+            <SubPage
+                class="mb-8"
+                backHref={localizeHref('/', { locale })}
+                backLabel={m.navigation_back()}>
                 <p class="text-lg">
                     {m.portfolio_read_about()}
                 </p>
@@ -28,7 +31,11 @@ const locale = getLocale();
             <ul class="grid grid-cols-1 lg:grid-cols-2">
                 {
                     projects.map((project) => (
-                        <ProjectTeaser {project} text={getProjectText(locale, project.slug)} />
+                        <ProjectTeaser
+                            {project}
+                            text={getProjectText(locale, project.slug)}
+                            href={localizeHref(`/portfolio/${project.slug}`, { locale })}
+                        />
                     ))
                 }
             </ul>

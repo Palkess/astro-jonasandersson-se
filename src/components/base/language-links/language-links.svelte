@@ -1,26 +1,30 @@
 <script lang="ts">
     import FlagBritainIcon from '$lib/components/foundation/icons/FlagBritainIcon.svelte';
     import FlagSwedenIcon from '$lib/components/foundation/icons/FlagSwedenIcon.svelte';
-    import { getLocale, locales, localizeHref } from '$lib/paraglide/runtime';
 
-    let activeLanguage = $state(getLocale());
-
-    interface Props {
-        pageUrl: URL;
+    interface Language {
+        code: string;
+        /** Link to the current page in this language. */
+        href: string;
+        current: boolean;
     }
 
-    let { pageUrl }: Props = $props();
+    interface Props {
+        languages: Language[];
+    }
+
+    let { languages }: Props = $props();
 </script>
 
-{#each locales as locale}
+{#each languages as language}
     <a
         rel="alternate"
-        class="{activeLanguage === locale ? 'border-b-2' : 'mb-0.5'} flex gap-2 rounded pb-2"
-        hreflang={locale}
-        href={localizeHref(pageUrl.pathname, { locale })}>
-        {#if locale === 'sv'}
+        class="{language.current ? 'border-b-2' : 'mb-0.5'} flex gap-2 rounded pb-2"
+        hreflang={language.code}
+        href={language.href}>
+        {#if language.code === 'sv'}
             <FlagSwedenIcon /> sv
-        {:else if locale === 'en'}
+        {:else if language.code === 'en'}
             <FlagBritainIcon /> en
         {/if}
     </a>

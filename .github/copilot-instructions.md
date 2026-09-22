@@ -45,7 +45,7 @@ Each component lives in its own folder: `component-name/component-name.svelte`, 
 
 **`$lib` alias.** All internal imports use `$lib/...` (maps to `./src/`). Never use relative paths across directories.
 
-**i18n.** Short strings: `m.key()` from `$lib/paraglide/messages.js`. Long-form content: separate Swedish/English Svelte components. All internal links: `localizeHref()` from `$lib/paraglide/runtime`.
+**i18n.** Short strings: `m.key()` from `$lib/paraglide/messages.js`. Long-form content: separate Swedish/English Svelte components. All internal links: `localizeHref()` from `$lib/paraglide/runtime`. Components in `src/components/` don't import Paraglide: pages/layouts pass localized hrefs and labels in as props.
 
 **Images.** Processed images: import from `$lib/assets/`, use `.src`. Static images: `public/images/`, reference by string path.
 

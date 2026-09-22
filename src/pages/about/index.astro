@@ -21,7 +21,10 @@ const skills: string[] = ['Svelte', 'Typescript', 'Angular', 'Vue', 'Node', '.NE
             <PageTitle>
                 {m.navigation_about()}
             </PageTitle>
-            <SubPage class="mb-8">
+            <SubPage
+                class="mb-8"
+                backHref={localizeHref('/', { locale: getLocale() })}
+                backLabel={m.navigation_back()}>
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-[13rem_1fr]">
                     <img
                         class="view-transition-profileImg mx-auto aspect-square w-52 shrink-0 rounded-full border-2 object-cover p-2"

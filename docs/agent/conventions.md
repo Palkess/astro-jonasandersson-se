@@ -83,6 +83,7 @@ Never use relative paths (`../../`) to cross component directories.
 - Long-form content (experience timelines, bio paragraphs): create separate language-specific components (e.g. `swedish-experience.svelte` / `english-experience.svelte`)
 - All internal links must go through `localizeHref()` from `$lib/paraglide/runtime`
 - Locale detection: use `getLocale()` from `$lib/paraglide/runtime`
+- Components in `src/components/` never resolve the locale or build links themselves — no `$lib/paraglide` imports there. The page or layout passes already-localized `href`s and translated labels in as props (e.g. `backHref`/`backLabel` on `sub-page`, `languages` on `language-links`). This keeps components working unchanged when the i18n layer changes.
 
 ```astro
 ---

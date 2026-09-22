@@ -2,8 +2,16 @@
 import '../styles/global.css';
 import SocialLinks from '$lib/components/base/social-links/social-links.svelte';
 import LanguageLinks from '$lib/components/base/language-links/language-links.svelte';
+import { getLocale, locales, localizeHref } from '$lib/paraglide/runtime';
 
 const { title } = Astro.props;
+
+// Paraglide still resolves the switcher links until Layout knows its route (task 5).
+const languages = locales.map((code) => ({
+    code,
+    href: localizeHref(Astro.url.pathname, { locale: code }),
+    current: code === getLocale()
+}));
 ---
 
 <!doctype html>
@@ -31,7 +39,7 @@ const { title } = Astro.props;
                 </div>
 
                 <div class="flex gap-4">
-                    <LanguageLinks pageUrl={Astro.url} />
+                    <LanguageLinks {languages} />
                 </div>
             </div>
 
