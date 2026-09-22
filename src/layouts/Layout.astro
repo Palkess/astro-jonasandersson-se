@@ -3,7 +3,7 @@
  * The page shell: head metadata, top menu, footer. Every route renders through this.
  *
  * It derives `lang`, the canonical URL, the `hreflang` alternates and the
- * language switcher from `locale` + `routeKey` rather than taking them as props,
+ * language switcher from `locale` + `routeKey` (+ `param`) rather than taking them as props,
  * so a page can't ship metadata that disagrees with the URL it's served from.
  */
 import '../styles/global.css';
@@ -21,23 +21,25 @@ import {
 interface Props {
     locale: Locale;
     routeKey: RouteKey;
+    /** Sub-path under the route, e.g. a project slug under `portfolio`. */
+    param?: string;
     /** Page-specific title, prefixed to the site title. Omit for the site title alone. */
     title?: string;
     description?: string;
 }
 
-const { locale, routeKey, title, description } = Astro.props;
+const { locale, routeKey, param, title, description } = Astro.props;
 const t = useTranslations(locale);
 
 const fullTitle = title ? `${title} | ${t.meta.siteTitle}` : t.meta.siteTitle;
-const canonical = new URL(routeHref(locale, routeKey), Astro.site).href;
-const alternates = alternateLinks(routeKey);
+const canonical = new URL(routeHref(locale, routeKey, param), Astro.site).href;
+const alternates = alternateLinks(routeKey, param);
 const ogImage = new URL('/images/og-image.jpg', Astro.site).href;
 
 // The switcher points at the *same page* in the other language, not at its home page.
 const languages = locales.map((code) => ({
     code,
-    href: routeHref(code, routeKey),
+    href: routeHref(code, routeKey, param),
     current: code === locale
 }));
 ---

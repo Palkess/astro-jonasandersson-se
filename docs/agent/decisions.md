@@ -137,6 +137,8 @@ Consult this file when making or evaluating architectural or design choices, or 
 - Visitors always land in Swedish at `/` unless they follow an `/en/` link. The language switcher links to the same page in the other language.
 - Adding a locale means adding it to `locales` (in `astro.config.mjs` *and* `src/i18n/routes.ts`), a `ui.<locale>.ts` / `projects.<locale>.ts` dictionary, and its `routeSlugs` entries. The `[locale]` routes then generate its pages automatically.
 - Adding a page means a Swedish route file, a `RouteKey` + `routeSlugs` entry, and a case in `[locale]/[slug].astro`.
+- Pages below a route (e.g. `/portfolio/<slug>/`) use `routeHref(locale, key, param)` and pass `param` to `Layout`. The non-default locales get a nested `[locale]/[slug]/[param].astro` whose middle segment comes from `routeSlugs`, as `[locale]/[slug]/[project].astro` does.
+- Adding a portfolio project needs no route changes: `getStaticPaths` in both project routes iterates `src/data/projects.ts`.
 
 *Cross-reference: architecture.md — Internationalization; conventions.md — Internationalization*
 

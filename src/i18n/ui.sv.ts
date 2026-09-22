@@ -38,7 +38,8 @@ export const uiSv = {
     portfolio: {
         readAbout: 'Här kan ni läsa om några av dom projekt som jag har varit med och utvecklat.',
         usedTech: 'Använda tekniker',
-        gotoWebpage: 'Gå till webbplatsen'
+        gotoWebpage: 'Gå till webbplatsen',
+        release: 'Release'
     }
 };
 

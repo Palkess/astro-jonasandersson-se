@@ -1,0 +1,33 @@
+---
+/**
+ * Swedish portfolio project pages — `/portfolio/<slug>/`, one per entry in
+ * `src/data/projects.ts`. Other locales are `[locale]/[slug]/[project].astro`.
+ */
+import Layout from '$lib/layouts/Layout.astro';
+import ProjectPage from '$lib/components/pages/project-page/project-page.astro';
+import { projects } from '$lib/data/projects';
+import { getProjectText } from '$lib/i18n';
+import type { Project } from '$lib/types/project';
+
+export function getStaticPaths() {
+    return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+interface Props {
+    project: Project;
+}
+
+const { project } = Astro.props;
+
+const locale = 'sv' as const;
+const text = getProjectText(locale, project.slug);
+---
+
+<Layout
+    {locale}
+    routeKey="portfolio"
+    param={project.slug}
+    title={text.title}
+    description={text.description}>
+    <ProjectPage {locale} {project} />
+</Layout>

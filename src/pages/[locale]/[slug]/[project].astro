@@ -1,0 +1,42 @@
+---
+/**
+ * Portfolio project pages in every non-Swedish locale — `/en/portfolio/<slug>/`.
+ * The `portfolio` segment comes from `routeSlugs` rather than a folder name, so
+ * it follows the routing table like `[locale]/[slug].astro` does. Swedish
+ * versions are `src/pages/portfolio/[slug].astro`.
+ */
+import Layout from '$lib/layouts/Layout.astro';
+import ProjectPage from '$lib/components/pages/project-page/project-page.astro';
+import { projects } from '$lib/data/projects';
+import { getProjectText } from '$lib/i18n';
+import { defaultLocale, locales, routeSlugs, type Locale } from '$lib/i18n/routes';
+import type { Project } from '$lib/types/project';
+
+export function getStaticPaths() {
+    return locales
+        .filter((locale) => locale !== defaultLocale)
+        .flatMap((locale) =>
+            projects.map((project) => ({
+                params: { locale, slug: routeSlugs.portfolio[locale], project: project.slug },
+                props: { locale, project }
+            }))
+        );
+}
+
+interface Props {
+    locale: Locale;
+    project: Project;
+}
+
+const { locale, project } = Astro.props;
+const text = getProjectText(locale, project.slug);
+---
+
+<Layout
+    {locale}
+    routeKey="portfolio"
+    param={project.slug}
+    title={text.title}
+    description={text.description}>
+    <ProjectPage {locale} {project} />
+</Layout>

@@ -43,7 +43,9 @@ Add an entry when:
 
 ### SUSPECT-001: Portfolio detail pages are linked but do not exist
 
-**Status:** Suspected / In progress
+**Status:** Resolved
+
+**Resolved:** 2026-09-22 — Added `src/pages/portfolio/[slug].astro` (Swedish) and `src/pages/[locale]/[slug]/[project].astro` (other locales), both rendering the `project-page` body for every entry in `src/data/projects.ts`. The teaser links (`/portfolio/<slug>/`, `/en/portfolio/<slug>/`) now resolve. The page is ported from the previous SvelteKit site's `src/routes/portfolio/[slug]/`.
 
 **Location:** `src/components/composites/project-teaser/project-teaser.svelte`, `src/pages/portfolio/index.astro`
 

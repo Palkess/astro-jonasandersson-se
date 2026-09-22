@@ -62,8 +62,9 @@ Each component lives in its own folder: `component-name/component-name.svelte`, 
 - `/`, `/about/`, `/portfolio/` — `src/pages/index.astro`, `about.astro`, `portfolio.astro` (Swedish, `const locale = 'sv'`)
 - `/en/` — `src/pages/[locale]/index.astro`
 - `/en/about/`, `/en/portfolio/` — `src/pages/[locale]/[slug].astro` (slugs from `routeSlugs` in `src/i18n/routes.ts`)
+- `/portfolio/<slug>/` — `src/pages/portfolio/[slug].astro`; `/en/portfolio/<slug>/` — `src/pages/[locale]/[slug]/[project].astro`. One page per project in `src/data/projects.ts`, rendered by `project-page`
 
-Each route file renders a page body from `src/components/pages/` inside `<Layout {locale} routeKey="…">`. Portfolio detail pages are still missing — see Known Issues.
+Each route file renders a page body from `src/components/pages/` inside `<Layout {locale} routeKey="…">`.
 
 **Locales:** Swedish (`sv`) is the default locale (unprefixed root paths). English (`en`) uses the `/en/` prefix. No detection: the URL alone decides the language — no cookie, no `Accept-Language`, no client-side redirect (ADR-007).
 
@@ -94,7 +95,7 @@ Each route file renders a page body from `src/components/pages/` inside `<Layout
 
 **BUG-001 (Resolved 2026-09-22):** `<html lang>` used to be hardcoded to `"en"`. `Layout.astro` now renders `lang={locale}` from its required `locale` prop.
 
-**SUSPECT-001 (Suspected):** Portfolio links to `/portfolio/{slug}` but no `[slug].astro` dynamic route exists. These links currently 404.
+**SUSPECT-001 (Resolved 2026-09-22):** Portfolio detail pages used to 404. They now exist at `/portfolio/<slug>/` and `/en/portfolio/<slug>/`.
 
 ---
 

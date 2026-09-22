@@ -34,6 +34,7 @@ export const uiEn: UiStrings = {
         readAbout:
             'Here you can read about some of the projects that I have been involved in developing.',
         usedTech: 'Used technologies',
-        gotoWebpage: 'Go to webpage'
+        gotoWebpage: 'Go to webpage',
+        release: 'Release'
     }
 };

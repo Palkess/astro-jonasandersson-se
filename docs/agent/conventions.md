@@ -19,7 +19,7 @@ Components follow a strict four-tier hierarchy:
 | **Foundation** | `src/components/foundation/` | Raw SVG icons. No logic, no styling variation. |
 | **Base** | `src/components/base/` | Atomic UI components (buttons, links, labels). |
 | **Composites** | `src/components/composites/` | Assembled from base components. Page-level sections. |
-| **Pages** | `src/components/pages/` | One page body per route (`home-page`, `about-page`, `portfolio-page`), as `.astro`. Takes `locale` as its only required prop. |
+| **Pages** | `src/components/pages/` | One page body per route (`home-page`, `about-page`, `portfolio-page`, `project-page`), as `.astro`. Takes `locale`, plus the entry it displays for detail pages (`project-page` takes a `Project`). |
 
 Never skip tiers — composites use base, base uses foundation. The one exception is the pages tier: a page body may use composites, base and foundation directly.
 

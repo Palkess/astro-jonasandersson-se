@@ -40,12 +40,14 @@ The locale flows down as a prop. Nothing reads it from a request, cookie or glob
 | `/portfolio/` | `src/pages/portfolio.astro` → `portfolio-page` | Portfolio listing: project teasers |
 | `/en/` | `src/pages/[locale]/index.astro` → `home-page` | Home page in every non-default locale |
 | `/en/about/`, `/en/portfolio/` | `src/pages/[locale]/[slug].astro` → `about-page` / `portfolio-page` | Content pages in every non-default locale; slugs from `routeSlugs` |
+| `/portfolio/<slug>/` | `src/pages/portfolio/[slug].astro` → `project-page` | One page per project in `src/data/projects.ts` |
+| `/en/portfolio/<slug>/` | `src/pages/[locale]/[slug]/[project].astro` → `project-page` | Project pages in every non-default locale; the `portfolio` segment comes from `routeSlugs` |
 
 Swedish route files set `const locale = 'sv'`. The `[locale]` files generate the other locales with `getStaticPaths` over `locales` minus the default (constants the function needs are declared *inside* it, because Astro extracts `getStaticPaths` into its own chunk).
 
 Route files are thin wrappers: they fix the locale and render the matching page body from `src/components/pages/` inside `<Layout {locale} routeKey="…" title={…}>`. From `locale` + `routeKey`, `Layout.astro` derives `<html lang>`, the translated `<title>`, the canonical URL, the `hreflang` alternates (resolved against `site`), the OG tags and the language switcher's links, which point at the same page in the other language.
 
-Portfolio item detail pages do not exist yet — `[locale]/[slug].astro` only serves the content pages. See `bugs.md` (SUSPECT-001).
+Project pages pass `routeKey="portfolio"` and `param={slug}` to `Layout`, which appends the slug to the canonical URL, the `hreflang` alternates and the language switcher links.
 
 ## Component Hierarchy
 
@@ -63,6 +65,7 @@ Composites (src/components/composites/)
 
 Pages (src/components/pages/)
   └─ home-page, about-page, portfolio-page     ← one body per route, takes `locale`
+  └─ project-page                              ← one portfolio project, takes `locale` + `project`
 ```
 
 Composites are assembled from Base components. Page bodies use composites, base and foundation directly, and are rendered by thin route files in `src/pages/` inside `<Layout>`. Foundation icons are leaf nodes — no dependencies.
