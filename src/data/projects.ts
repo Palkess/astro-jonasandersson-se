@@ -12,7 +12,8 @@ export const projects: Project[] = [
         slug: 'olandsstuguthyrning-com',
         image: '/images/olandsstuguthyrning.jpg',
         technologies: ['TypeScript', 'Astro', 'Svelte', 'Tailwind', 'GitHub Pages'],
-        status: 'private',
+        status: 'public',
+        githubUrl: 'https://github.com/Palkess/astro-olandsstuguthyrning-com',
         url: 'https://olandsstuguthyrning.com',
         releaseDate: '2025-03-18'
     },
