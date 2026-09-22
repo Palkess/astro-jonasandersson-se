@@ -8,6 +8,17 @@ import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
+    site: 'https://jonasandersson.se',
+
+    i18n: {
+        defaultLocale: 'sv',
+        locales: ['sv', 'en'],
+        routing: {
+            // Swedish stays unprefixed so existing inbound links survive.
+            prefixDefaultLocale: false
+        }
+    },
+
     integrations: [svelte()],
 
     vite: {
