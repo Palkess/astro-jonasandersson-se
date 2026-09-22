@@ -16,6 +16,8 @@ export const getSkillClassColors = (skill: string) => {
             return 'bg-angular text-white';
         case 'vue':
             return 'bg-[#42b883] text-black';
+        case 'react':
+            return 'bg-[#61dafb] text-black';
         case 'node':
             return 'bg-[#417e38] text-white';
         case '.net':

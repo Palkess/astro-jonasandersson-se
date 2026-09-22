@@ -3,7 +3,7 @@ import type { UiStrings } from '$lib/i18n/ui.sv';
 export const uiEn: UiStrings = {
     meta: {
         siteTitle:
-            'Jonas Andersson - Fullstack web developer | Svelte, Angular, Vue | Accessibility through and through',
+            'Jonas Andersson - Fullstack web developer | Svelte, Angular, Vue, React | Accessibility through and through',
         aboutTitle: 'About me',
         portfolioTitle: 'Portfolio'
     },
@@ -21,7 +21,7 @@ export const uiEn: UiStrings = {
 
     home: {
         subTitle:
-            'Fullstack web developer | Svelte, Angular, Vue | Accessibility through and through'
+            'Fullstack web developer | Svelte, Angular, Vue, React | Accessibility through and through'
     },
 
     about: {

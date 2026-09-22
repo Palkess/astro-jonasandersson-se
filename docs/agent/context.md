@@ -50,7 +50,7 @@ Adding a project: add its slug to the `ProjectSlug` union, its data to `src/data
 
 Technologies listed in a project or on the home skills list must match the known names in `getSkillClassColors()` (`src/utils/getSkillClassColors.ts`) to receive branded color treatment. Known names:
 
-`TypeScript`, `Svelte`, `SvelteKit`, `Tailwind`, `TailwindCSS`, `MySQL`, `IIS`, `Angular`, `Vue`, `Node`, `.NET`, `Astro`, `GitHub Pages` (alias `GitHub`)
+`TypeScript`, `Svelte`, `SvelteKit`, `Tailwind`, `TailwindCSS`, `MySQL`, `IIS`, `Angular`, `Vue`, `React`, `Node`, `.NET`, `Astro`, `GitHub Pages` (alias `GitHub`)
 
 When adding a colour, check the tag's text contrast: at least 4.5:1 against its background (WCAG AA). That's why `Astro` uses black text on its orange.
 

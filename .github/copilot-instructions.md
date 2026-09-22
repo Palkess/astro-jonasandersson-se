@@ -103,7 +103,7 @@ Each route file renders a page body from `src/components/pages/` inside `<Layout
 
 - **Base locale:** Swedish (`sv`). English (`en`) is secondary.
 - **`Project` type** (`src/types/project.ts`): `slug`, `image`, `technologies`, `status` (`public`/`private`/`inprogress`), `githubUrl`, `url`, `releaseDate`. Prose (`title`, `descriptionTitle`, `description`) is a `ProjectText` in `src/i18n/projects.{sv,en}.ts`, read via `getProjectText(locale, slug)`.
-- **Technology names** must match those in `getSkillClassColors()` for branded colors: `TypeScript`, `Svelte`, `SvelteKit`, `Tailwind`, `TailwindCSS`, `MySQL`, `IIS`, `Angular`, `Vue`, `Node`, `.NET`, `Astro`, `GitHub Pages`.
+- **Technology names** must match those in `getSkillClassColors()` for branded colors: `TypeScript`, `Svelte`, `SvelteKit`, `Tailwind`, `TailwindCSS`, `MySQL`, `IIS`, `Angular`, `Vue`, `React`, `Node`, `.NET`, `Astro`, `GitHub Pages`.
 
 ---
 

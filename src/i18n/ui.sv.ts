@@ -8,7 +8,7 @@
 export const uiSv = {
     meta: {
         siteTitle:
-            'Jonas Andersson - Fullstack webbutvecklare | Svelte, Angular, Vue | Tillgänglighet i benmärgen',
+            'Jonas Andersson - Fullstack webbutvecklare | Svelte, Angular, Vue, React | Tillgänglighet i benmärgen',
         aboutTitle: 'Om mig',
         portfolioTitle: 'Portfolio'
     },
@@ -26,7 +26,8 @@ export const uiSv = {
     },
 
     home: {
-        subTitle: 'Fullstack webbutvecklare | Svelte, Angular, Vue | Tillgänglighet i benmärgen'
+        subTitle:
+            'Fullstack webbutvecklare | Svelte, Angular, Vue, React | Tillgänglighet i benmärgen'
     },
 
     about: {
