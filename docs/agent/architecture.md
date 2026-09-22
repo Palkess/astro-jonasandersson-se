@@ -31,9 +31,11 @@ Request
 
 | Route | File | Description |
 |-------|------|-------------|
-| `/` | `src/pages/index.astro` | Landing page: name, subtitle, skills, profile image, nav |
-| `/about` | `src/pages/about/index.astro` | About page: career timeline, biography |
-| `/portfolio` | `src/pages/portfolio/index.astro` | Portfolio listing: project teasers |
+| `/` | `src/pages/index.astro` → `home-page` | Landing page: name, subtitle, skills, profile image, nav |
+| `/about` | `src/pages/about/index.astro` → `about-page` | About page: career timeline, biography |
+| `/portfolio` | `src/pages/portfolio/index.astro` → `portfolio-page` | Portfolio listing: project teasers |
+
+Route files are thin wrappers: they read the locale (currently Paraglide's `getLocale()`) and render the matching page body from `src/components/pages/` inside `<Layout>`.
 
 There are no dynamic routes (`[slug].astro`) — portfolio item detail pages do not yet exist. See `bugs.md`.
 
@@ -50,9 +52,12 @@ Composites (src/components/composites/)
   └─ project-teaser, sub-page
   └─ swedish-experience, english-experience   ← locale-split content
   └─ swedish-history, english-history         ← locale-split content
+
+Pages (src/components/pages/)
+  └─ home-page, about-page, portfolio-page     ← one body per route, takes `locale`
 ```
 
-Composites are assembled from Base components. Pages use composites directly. Foundation icons are leaf nodes — no dependencies.
+Composites are assembled from Base components. Page bodies use composites, base and foundation directly, and are rendered by thin route files in `src/pages/` inside `<Layout>`. Foundation icons are leaf nodes — no dependencies.
 
 ## Internationalization
 

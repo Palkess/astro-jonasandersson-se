@@ -1,0 +1,40 @@
+---
+import PageTitle from '$lib/components/base/page-title/page-title.svelte';
+import ProjectTeaser from '$lib/components/composites/project-teaser/project-teaser.svelte';
+import SubPage from '$lib/components/composites/sub-page/sub-page.svelte';
+import { projects } from '$lib/data/projects';
+import { getProjectText, routeHref, useTranslations, type Locale } from '$lib/i18n';
+
+interface Props {
+    locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<main class="flex flex-col items-center justify-center p-2">
+    <div class="container">
+        <PageTitle>
+            {t.nav.portfolio}
+        </PageTitle>
+
+        <SubPage class="mb-8" backHref={routeHref(locale, 'home')} backLabel={t.nav.back}>
+            <p class="text-lg">
+                {t.portfolio.readAbout}
+            </p>
+        </SubPage>
+
+        <ul class="grid grid-cols-1 lg:grid-cols-2">
+            {
+                projects.map((project) => (
+                    <ProjectTeaser
+                        {project}
+                        text={getProjectText(locale, project.slug)}
+                        href={routeHref(locale, 'portfolio', project.slug)}
+                    />
+                ))
+            }
+        </ul>
+    </div>
+</main>

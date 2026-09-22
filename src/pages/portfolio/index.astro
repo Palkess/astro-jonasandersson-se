@@ -1,44 +1,12 @@
 ---
-import PageTitle from '$lib/components/base/page-title/page-title.svelte';
-import ProjectTeaser from '$lib/components/composites/project-teaser/project-teaser.svelte';
-import SubPage from '$lib/components/composites/sub-page/sub-page.svelte';
 import Layout from '$lib/layouts/Layout.astro';
-import { m } from '$lib/paraglide/messages';
-import { getLocale, localizeHref } from '$lib/paraglide/runtime';
-import { projects } from '$lib/data/projects';
-import { getProjectText } from '$lib/i18n';
+import PortfolioPage from '$lib/components/pages/portfolio-page/portfolio-page.astro';
+import { getLocale } from '$lib/paraglide/runtime';
 
 // Paraglide still owns locale detection until the static cut-over (task 6).
 const locale = getLocale();
 ---
 
 <Layout title="Portfolio">
-    <main class="flex flex-col items-center justify-center p-2">
-        <div class="container">
-            <PageTitle>
-                {m.navigation_portfolio()}
-            </PageTitle>
-
-            <SubPage
-                class="mb-8"
-                backHref={localizeHref('/', { locale })}
-                backLabel={m.navigation_back()}>
-                <p class="text-lg">
-                    {m.portfolio_read_about()}
-                </p>
-            </SubPage>
-
-            <ul class="grid grid-cols-1 lg:grid-cols-2">
-                {
-                    projects.map((project) => (
-                        <ProjectTeaser
-                            {project}
-                            text={getProjectText(locale, project.slug)}
-                            href={localizeHref(`/portfolio/${project.slug}`, { locale })}
-                        />
-                    ))
-                }
-            </ul>
-        </div>
-    </main>
+    <PortfolioPage {locale} />
 </Layout>

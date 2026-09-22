@@ -32,10 +32,11 @@ The build is a two-step process: Paraglide compiles `messages/*.json` → `src/p
 
 ## Conventions
 
-**Component architecture** follows a strict three-tier hierarchy:
+**Component architecture** follows a strict four-tier hierarchy:
 - `src/components/foundation/` — SVG icons only, no logic
 - `src/components/base/` — atomic UI (button, links, labels)
 - `src/components/composites/` — assembled page sections
+- `src/components/pages/` — one `.astro` page body per route, taking `locale` as a prop; the files in `src/pages/` are thin wrappers that render it inside `<Layout>`
 
 Each component lives in its own folder: `component-name/component-name.svelte`, with an optional `types.ts` sibling.
 
@@ -45,7 +46,7 @@ Each component lives in its own folder: `component-name/component-name.svelte`, 
 
 **`$lib` alias.** All internal imports use `$lib/...` (maps to `./src/`). Never use relative paths across directories.
 
-**i18n.** Short strings: `m.key()` from `$lib/paraglide/messages.js`. Long-form content: separate Swedish/English Svelte components. All internal links: `localizeHref()` from `$lib/paraglide/runtime`. Components in `src/components/` don't import Paraglide: pages/layouts pass localized hrefs and labels in as props.
+**i18n.** Short strings: `m.key()` from `$lib/paraglide/messages.js`. Long-form content: separate Swedish/English Svelte components. All internal links: `localizeHref()` from `$lib/paraglide/runtime`. Page bodies (`src/components/pages/`) get text and links from `useTranslations(locale)` / `routeHref(locale, key)` in `$lib/i18n`; lower-tier components have no runtime imports from `$lib/i18n` or Paraglide (types only) and receive localized hrefs and labels as props.
 
 **Images.** Processed images: import from `$lib/assets/`, use `.src`. Static images: `public/images/`, reference by string path.
 

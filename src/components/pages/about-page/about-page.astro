@@ -1,0 +1,54 @@
+---
+import PageTitle from '$lib/components/base/page-title/page-title.svelte';
+import Paper from '$lib/components/base/paper/paper.svelte';
+import SkillsList from '$lib/components/base/skills-list/skills-list.svelte';
+import SubPage from '$lib/components/composites/sub-page/sub-page.svelte';
+import SwedishExperience from '$lib/components/composites/swedish-experience/swedish-experience.svelte';
+import EnglishExperience from '$lib/components/composites/english-experience/english-experience.svelte';
+import SwedishHistory from '$lib/components/composites/swedish-history/swedish-history.svelte';
+import EnglishHistory from '$lib/components/composites/english-history/english-history.svelte';
+import profileImg from '$lib/assets/images/profile_pic.jpg';
+import { routeHref, useTranslations, type Locale } from '$lib/i18n';
+
+interface Props {
+    locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const skills: string[] = ['Svelte', 'Typescript', 'Angular', 'Vue', 'Node', '.NET'];
+---
+
+<main class="flex flex-col items-center justify-center p-2">
+    <div class="container">
+        <PageTitle>
+            {t.nav.about}
+        </PageTitle>
+        <SubPage class="mb-8" backHref={routeHref(locale, 'home')} backLabel={t.nav.back}>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-[13rem_1fr]">
+                <img
+                    class="view-transition-profileImg mx-auto aspect-square w-52 shrink-0 rounded-full border-2 object-cover p-2"
+                    src={profileImg.src}
+                    alt={t.common.profileImgAlt}
+                />
+                <div class="view-transition-pageSummary grow-1 basis-[600px]">
+                    <p class="bg-navy-100 mb-4 rounded-2xl p-4 text-lg text-white">
+                        {t.about.summary}
+                    </p>
+                    <span class="text-lg font-medium">{t.about.skills}:</span>
+                    <SkillsList {skills} style="view-transition-name: expertise-list;" />
+                </div>
+            </div>
+        </SubPage>
+
+        <div class="view-transition-pageContent mb-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_3fr]">
+            <div class="rounded-2xl border-2 p-4">
+                {locale === 'sv' ? <SwedishExperience /> : <EnglishExperience />}
+            </div>
+            <Paper class="*:not-last:mb-4">
+                {locale === 'sv' ? <SwedishHistory /> : <EnglishHistory />}
+            </Paper>
+        </div>
+    </div>
+</main>

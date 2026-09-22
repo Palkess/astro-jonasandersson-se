@@ -12,15 +12,18 @@ Formatting is fully handled by Prettier — see `.prettierrc`. Run `npm run form
 
 ## Component Architecture
 
-Components follow a strict three-tier hierarchy:
+Components follow a strict four-tier hierarchy:
 
 | Tier | Path | Purpose |
 |------|------|---------|
 | **Foundation** | `src/components/foundation/` | Raw SVG icons. No logic, no styling variation. |
 | **Base** | `src/components/base/` | Atomic UI components (buttons, links, labels). |
 | **Composites** | `src/components/composites/` | Assembled from base components. Page-level sections. |
+| **Pages** | `src/components/pages/` | One page body per route (`home-page`, `about-page`, `portfolio-page`), as `.astro`. Takes `locale` as its only required prop. |
 
-Never skip tiers — composites use base, base uses foundation.
+Never skip tiers — composites use base, base uses foundation. The one exception is the pages tier: a page body may use composites, base and foundation directly.
+
+Page bodies hold everything inside `<Layout>`. The route files in `src/pages/` stay thin: they pick the locale, set the `<Layout>` metadata and render one page body. Because the body only takes `locale`, the same component serves both `/about` and `/en/about`.
 
 ## File Structure
 
@@ -83,7 +86,8 @@ Never use relative paths (`../../`) to cross component directories.
 - Long-form content (experience timelines, bio paragraphs): create separate language-specific components (e.g. `swedish-experience.svelte` / `english-experience.svelte`)
 - All internal links must go through `localizeHref()` from `$lib/paraglide/runtime`
 - Locale detection: use `getLocale()` from `$lib/paraglide/runtime`
-- Components in `src/components/` never resolve the locale or build links themselves — no `$lib/paraglide` imports there. The page or layout passes already-localized `href`s and translated labels in as props (e.g. `backHref`/`backLabel` on `sub-page`, `languages` on `language-links`). This keeps components working unchanged when the i18n layer changes.
+- Page bodies (`src/components/pages/`) resolve text and links from their `locale` prop with `useTranslations(locale)` and `routeHref(locale, key, param?)` from `$lib/i18n`. They never import `$lib/paraglide`.
+- Components in the foundation, base and composites tiers never resolve the locale or build links themselves — no runtime imports from `$lib/i18n` or `$lib/paraglide` there (type-only imports such as `ProjectText` are fine). The page body or layout passes already-localized `href`s and translated labels in as props (e.g. `backHref`/`backLabel` on `sub-page`, `languages` on `language-links`). The one exception is the locale-split long-form components (ADR-002), which *are* a language.
 
 ```astro
 ---
