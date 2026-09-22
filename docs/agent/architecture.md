@@ -87,7 +87,7 @@ MPA view transitions are enabled via `@view-transition { navigation: auto; }` in
 
 No Astro content collections. Data is inline:
 
-- **Portfolio projects**: hardcoded `Project[]` array in `src/pages/portfolio/index.astro`
+- **Portfolio projects**: locale-invariant `Project[]` in `src/data/projects.ts`; titles and descriptions per locale in `src/i18n/projects.{sv,en}.ts`, keyed by slug (see `context.md`)
 - **Career history**: encoded in the locale-specific experience/history Svelte components
 - **i18n strings**: `messages/*.json`
 

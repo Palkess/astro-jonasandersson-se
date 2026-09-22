@@ -66,7 +66,7 @@ No dynamic routes exist yet (portfolio detail pages are missing — see Known Is
 
 **Locales:** Swedish (`sv`) is the base locale (root paths). English (`en`) uses `/en/` prefix. Detection order: URL → cookie → base locale.
 
-**Data:** No content collections. Portfolio projects are a hardcoded `Project[]` in `src/pages/portfolio/index.astro`. Career history is in the locale-split experience/history Svelte components.
+**Data:** No content collections. Portfolio projects are a `Project[]` in `src/data/projects.ts` (locale-invariant data), with per-locale texts in `src/i18n/projects.{sv,en}.ts` keyed by slug. Career history is in the locale-split experience/history Svelte components.
 
 **View transitions:** Named MPA transitions (`.view-transition-pageTitle`, etc.) provide smooth cross-page animation. Transition names must match between paired elements.
 
@@ -99,7 +99,7 @@ No dynamic routes exist yet (portfolio detail pages are missing — see Known Is
 ## Domain Context
 
 - **Base locale:** Swedish (`sv`). English (`en`) is secondary.
-- **`Project` type** (`src/types/project.ts`): `slug`, `title`, `description`, `technologies`, `status` (`public`/`private`/`inprogress`), `githubUrl`, `url`, `releaseDate`, `translations`.
+- **`Project` type** (`src/types/project.ts`): `slug`, `image`, `technologies`, `status` (`public`/`private`/`inprogress`), `githubUrl`, `url`, `releaseDate`. Prose (`title`, `descriptionTitle`, `description`) is a `ProjectText` in `src/i18n/projects.{sv,en}.ts`, read via `getProjectText(locale, slug)`.
 - **Technology names** must match those in `getSkillClassColors()` for branded colors: `TypeScript`, `Svelte`, `SvelteKit`, `Tailwind`, `TailwindCSS`, `MySQL`, `IIS`, `Angular`, `Vue`, `Node`, `.NET`.
 
 ---

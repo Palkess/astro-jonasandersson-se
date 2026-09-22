@@ -19,19 +19,32 @@ Personal portfolio and CV website for **Jonas Andersson**, a Swedish fullstack w
 
 ## The `Project` Type
 
-Portfolio entries are modelled as `Project` objects (`src/types/project.ts`):
+A portfolio entry is split in two, keyed by `slug`:
+
+- **Locale-invariant data**: `Project` objects (`src/types/project.ts`), listed in `src/data/projects.ts`.
+- **Translated prose**: `ProjectText` (`src/i18n/types.ts`), in `src/i18n/projects.sv.ts` and `src/i18n/projects.en.ts`. Read it with `getProjectText(locale, slug)` from `$lib/i18n`.
+
+`Project`:
 
 | Field | Type | Meaning |
 |-------|------|---------|
-| `slug` | `string` | URL identifier for the portfolio detail page |
-| `title` | `string` | Display name of the project |
-| `description` | `string` | Short description (locale-specific via translations) |
+| `slug` | `ProjectSlug` | URL identifier for the portfolio detail page, and the key into the translation files |
+| `image` | `string` | Static image path under `public/` |
 | `technologies` | `string[]` | Tech stack tags — must match known skill names for color mapping |
 | `status` | `'public' \| 'private' \| 'inprogress'` | Visibility/completion state |
 | `githubUrl` | `string \| undefined` | Link to source code if public |
-| `url` | `string \| undefined` | Link to live project |
-| `releaseDate` | `Date \| undefined` | When the project launched |
-| `translations` | `Record<string, {title, description}>` | Per-locale overrides |
+| `url` | `string` | Link to live project |
+| `releaseDate` | `string` | When the project launched (`YYYY-MM-DD`) |
+
+`ProjectText` (one per locale per project):
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `title` | `string` | Display name of the project |
+| `descriptionTitle` | `string` | Short heading for the description |
+| `description` | `string` | Description paragraph |
+
+Adding a project: add its slug to the `ProjectSlug` union, its data to `src/data/projects.ts` and its text to **both** `projects.*.ts` files. `ProjectTexts` is a `Record<ProjectSlug, …>`, so a missing translation fails type-checking. Prose never goes in `src/data/`.
 
 ## Skill / Technology Terms
 

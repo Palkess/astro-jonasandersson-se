@@ -49,7 +49,7 @@ Add an entry when:
 
 **Impact:** Portfolio detail pages are effectively non-functional.
 
-**Likely intent:** Detail pages are planned but not yet implemented. The `Project` type has `translations` field with per-locale content, suggesting the full detail page was designed but not built.
+**Likely intent:** Detail pages are planned but not yet implemented. Each project has per-locale title and description texts (`src/i18n/projects.*.ts`), suggesting the full detail page was designed but not built.
 
 **Workaround:** None. Do not expose project links in production until the dynamic route is implemented.
 

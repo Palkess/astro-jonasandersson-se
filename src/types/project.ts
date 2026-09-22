@@ -1,21 +1,16 @@
-export interface ProjectTranslation {
-    title: string;
-    descriptionTitle: string;
-    description: string;
-}
+/** Every project slug. Adding a project means adding its slug here first. */
+export type ProjectSlug = 'olandsstuguthyrning-com';
 
+/**
+ * Locale-invariant facts about a portfolio project. Anything a human reads
+ * (title, descriptions) lives in `src/i18n/projects.*.ts`, keyed by `slug`.
+ */
 export interface Project {
-    slug: string;
-    title: string;
-    descriptionTitle: string;
-    description: string;
+    slug: ProjectSlug;
     image: string;
     technologies: string[];
     status: 'public' | 'private' | 'inprogress';
     githubUrl?: string;
     url: string;
     releaseDate: string;
-    translations: {
-        [key: string]: ProjectTranslation;
-    };
 }

@@ -17,13 +17,24 @@ import {
     type RouteKey
 } from '$lib/i18n/routes';
 
+import type { ProjectSlug } from '$lib/types/project';
+import type { ProjectText, ProjectTexts } from '$lib/i18n/types';
+
 import { uiSv, type UiStrings } from '$lib/i18n/ui.sv';
 import { uiEn } from '$lib/i18n/ui.en';
 
+import { projectsSv } from '$lib/i18n/projects.sv';
+import { projectsEn } from '$lib/i18n/projects.en';
+
 const uiByLocale: Record<Locale, UiStrings> = { sv: uiSv, en: uiEn };
+const projectsByLocale: Record<Locale, ProjectTexts> = { sv: projectsSv, en: projectsEn };
 
 export function useTranslations(locale: Locale): UiStrings {
     return uiByLocale[locale];
+}
+
+export function getProjectText(locale: Locale, slug: ProjectSlug): ProjectText {
+    return projectsByLocale[locale][slug];
 }
 
 /**
@@ -68,3 +79,4 @@ export function alternateLinks(key: RouteKey, param?: string): AlternateLink[] {
 export { defaultLocale, localeNames, localeTags, locales, isLocale } from '$lib/i18n/routes';
 export type { Locale, RouteKey } from '$lib/i18n/routes';
 export type { UiStrings } from '$lib/i18n/ui.sv';
+export type { ProjectText, ProjectTexts } from '$lib/i18n/types';
