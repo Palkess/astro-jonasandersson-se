@@ -11,6 +11,7 @@ export const uiSv = {
             'Jonas Andersson - Fullstack webbutvecklare | Svelte, Angular, Vue, React | Tillgänglighet i benmärgen',
         aboutTitle: 'Om mig',
         portfolioTitle: 'Portfolio',
+        notFoundTitle: 'Sidan hittades inte',
         homeDescription:
             'Jonas Andersson – fullstack webbutvecklare från Öland/Kalmar som bygger tillgängliga, användarvänliga webbplatser med Svelte, Angular, Vue och React.',
         aboutDescription:
@@ -49,6 +50,11 @@ export const uiSv = {
         usedTech: 'Använda tekniker',
         gotoWebpage: 'Gå till webbplatsen',
         release: 'Release'
+    },
+
+    notFound: {
+        text: 'Sidan du letar efter finns inte. Den kan ha flyttats eller tagits bort.',
+        homeLink: 'Gå till startsidan'
     }
 };
 

@@ -1,0 +1,29 @@
+---
+/**
+ * The 404 page body. GitHub Pages serves the same `404.html` for every missing path,
+ * whatever its language, so this body shows the message in every locale (default locale
+ * first) instead of taking a `locale` prop. Each block carries its own `lang`.
+ */
+import { defaultLocale, locales, routeHref, useTranslations } from '$lib/i18n';
+
+const ordered = [defaultLocale, ...locales.filter((locale) => locale !== defaultLocale)];
+const messages = ordered.map((locale) => ({
+    locale,
+    t: useTranslations(locale),
+    homeHref: routeHref(locale, 'home')
+}));
+---
+
+<main class="flex h-full flex-col items-center justify-center gap-12 text-center">
+    {
+        messages.map(({ locale, t, homeHref }, index) => (
+            <section lang={locale} class="flex flex-col items-center gap-4">
+                {index === 0 ? <h1>{t.meta.notFoundTitle}</h1> : <h2>{t.meta.notFoundTitle}</h2>}
+                <p class="text-lg">{t.notFound.text}</p>
+                <a class="link text-xl font-medium" href={homeHref}>
+                    {t.notFound.homeLink}
+                </a>
+            </section>
+        ))
+    }
+</main>

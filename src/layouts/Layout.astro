@@ -5,6 +5,10 @@
  * It derives `lang`, the canonical URL, the `hreflang` alternates and the
  * language switcher from `locale` + `routeKey` (+ `param`) rather than taking them as props,
  * so a page can't ship metadata that disagrees with the URL it's served from.
+ *
+ * A page without a `routeKey` (the 404 page, served for any missing path) has no URL of
+ * its own: it gets no canonical, `hreflang` or `og:url`, is marked `noindex`, and the
+ * switcher links to each language's home page.
  */
 import '../styles/global.css';
 import SocialLinks from '$lib/components/base/social-links/social-links.svelte';
@@ -20,7 +24,8 @@ import {
 
 interface Props {
     locale: Locale;
-    routeKey: RouteKey;
+    /** Omit only for a page that has no URL of its own, like the 404 page. */
+    routeKey?: RouteKey;
     /** Sub-path under the route, e.g. a project slug under `portfolio`. */
     param?: string;
     /** Page-specific title, prefixed to the site title. Omit for the site title alone. */
@@ -32,14 +37,14 @@ const { locale, routeKey, param, title, description } = Astro.props;
 const t = useTranslations(locale);
 
 const fullTitle = title ? `${title} | ${t.meta.siteTitle}` : t.meta.siteTitle;
-const canonical = new URL(routeHref(locale, routeKey, param), Astro.site).href;
-const alternates = alternateLinks(routeKey, param);
+const canonical = routeKey && new URL(routeHref(locale, routeKey, param), Astro.site).href;
+const alternates = routeKey ? alternateLinks(routeKey, param) : [];
 const ogImage = new URL('/images/og-image.jpg', Astro.site).href;
 
 // The switcher points at the *same page* in the other language, not at its home page.
 const languages = locales.map((code) => ({
     code,
-    href: routeHref(code, routeKey, param),
+    href: routeKey ? routeHref(code, routeKey, param) : routeHref(code, 'home'),
     current: code === locale
 }));
 ---
@@ -54,7 +59,13 @@ const languages = locales.map((code) => ({
         <meta name="generator" content={Astro.generator} />
         <title>{fullTitle}</title>
         {description && <meta name="description" content={description} />}
-        <link rel="canonical" href={canonical} />
+        {
+            canonical ? (
+                <link rel="canonical" href={canonical} />
+            ) : (
+                <meta name="robots" content="noindex" />
+            )
+        }
         {
             alternates.map((alternate) => (
                 <link
@@ -68,7 +79,7 @@ const languages = locales.map((code) => ({
         <meta property="og:type" content="website" />
         <meta property="og:title" content={fullTitle} />
         {description && <meta property="og:description" content={description} />}
-        <meta property="og:url" content={canonical} />
+        {canonical && <meta property="og:url" content={canonical} />}
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1869" />
         <meta property="og:image:height" content="685" />

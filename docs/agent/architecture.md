@@ -42,12 +42,15 @@ The locale flows down as a prop. Nothing reads it from a request, cookie or glob
 | `/en/about/`, `/en/portfolio/` | `src/pages/[locale]/[slug].astro` → `about-page` / `portfolio-page` | Content pages in every non-default locale; slugs from `routeSlugs` |
 | `/portfolio/<slug>/` | `src/pages/portfolio/[slug].astro` → `project-page` | One page per project in `src/data/projects.ts` |
 | `/en/portfolio/<slug>/` | `src/pages/[locale]/[slug]/[project].astro` → `project-page` | Project pages in every non-default locale; the `portfolio` segment comes from `routeSlugs` |
+| `/404.html` | `src/pages/404.astro` → `not-found-page` | Served by GitHub Pages for every missing path, in either language. Bilingual (see below) |
 
 Swedish route files set `const locale = 'sv'`. The `[locale]` files generate the other locales with `getStaticPaths` over `locales` minus the default (constants the function needs are declared *inside* it, because Astro extracts `getStaticPaths` into its own chunk).
 
 Route files are thin wrappers: they fix the locale and render the matching page body from `src/components/pages/` inside `<Layout {locale} routeKey="…" title={…}>`. From `locale` + `routeKey`, `Layout.astro` derives `<html lang>`, the translated `<title>`, the canonical URL, the `hreflang` alternates (resolved against `site`), the OG tags and the language switcher's links, which point at the same page in the other language.
 
 Project pages pass `routeKey="portfolio"` and `param={slug}` to `Layout`, which appends the slug to the canonical URL, the `hreflang` alternates and the language switcher links.
+
+The 404 page is the one route without a `routeKey`. GitHub Pages serves the same `404.html` for a missing `/…` and a missing `/en/…`, and the page can't tell which language the visitor was in without client-side JS (see the "Locale detection or redirects in the browser" anti-pattern). So `not-found-page` shows the message in every locale, default locale first, each block with its own `lang`, and `<html lang>` is the default locale. Without a `routeKey`, `Layout.astro` leaves out the canonical URL, the `hreflang` alternates and `og:url`, adds `<meta name="robots" content="noindex">`, and points the language switcher at each locale's home page.
 
 ## Component Hierarchy
 
@@ -66,6 +69,7 @@ Composites (src/components/composites/)
 Pages (src/components/pages/)
   └─ home-page, about-page, portfolio-page     ← one body per route, takes `locale`
   └─ project-page                              ← one portfolio project, takes `locale` + `project`
+  └─ not-found-page                            ← the 404 page, bilingual, takes no props
 ```
 
 Composites are assembled from Base components. Page bodies use composites, base and foundation directly, and are rendered by thin route files in `src/pages/` inside `<Layout>`. Foundation icons are leaf nodes — no dependencies.

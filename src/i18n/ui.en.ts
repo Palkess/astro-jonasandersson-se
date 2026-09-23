@@ -6,6 +6,7 @@ export const uiEn: UiStrings = {
             'Jonas Andersson - Fullstack web developer | Svelte, Angular, Vue, React | Accessibility through and through',
         aboutTitle: 'About me',
         portfolioTitle: 'Portfolio',
+        notFoundTitle: 'Page not found',
         homeDescription:
             'Jonas Andersson is a fullstack web developer from Öland/Kalmar, Sweden, building accessible, user-friendly websites with Svelte, Angular, Vue and React.',
         aboutDescription:
@@ -44,5 +45,10 @@ export const uiEn: UiStrings = {
         usedTech: 'Used technologies',
         gotoWebpage: 'Go to webpage',
         release: 'Release'
+    },
+
+    notFound: {
+        text: "The page you're looking for doesn't exist. It may have been moved or removed.",
+        homeLink: 'Go to the home page'
     }
 };

@@ -1,0 +1,16 @@
+---
+/**
+ * `/404.html` — GitHub Pages serves it for every missing path, in either language.
+ * The body is bilingual; the document language is the default locale.
+ */
+import Layout from '$lib/layouts/Layout.astro';
+import NotFoundPage from '$lib/components/pages/not-found-page/not-found-page.astro';
+import { defaultLocale, useTranslations } from '$lib/i18n';
+
+const locale = defaultLocale;
+const t = useTranslations(locale);
+---
+
+<Layout {locale} title={t.meta.notFoundTitle}>
+    <NotFoundPage />
+</Layout>

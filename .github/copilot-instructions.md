@@ -63,6 +63,7 @@ Each component lives in its own folder: `component-name/component-name.svelte`, 
 - `/en/` — `src/pages/[locale]/index.astro`
 - `/en/about/`, `/en/portfolio/` — `src/pages/[locale]/[slug].astro` (slugs from `routeSlugs` in `src/i18n/routes.ts`)
 - `/portfolio/<slug>/` — `src/pages/portfolio/[slug].astro`; `/en/portfolio/<slug>/` — `src/pages/[locale]/[slug]/[project].astro`. One page per project in `src/data/projects.ts`, rendered by `project-page`
+- `/404.html` — `src/pages/404.astro`, rendered by `not-found-page`. GitHub Pages serves it for every missing path in either language, so it shows the message in both languages (Swedish first, each block with its own `lang`) and passes no `routeKey` to `Layout`: no canonical or `hreflang`, `noindex`, and the switcher links to each language's home page
 
 Each route file renders a page body from `src/components/pages/` inside `<Layout {locale} routeKey="…">`.
 
