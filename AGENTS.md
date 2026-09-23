@@ -22,17 +22,18 @@ The build prerenders every page to static HTML in `dist/` — no compile step, n
 
 > Do not modify these without explicit human review.
 
-| Path | Reason |
-|------|--------|
-| `src/i18n/ui.*.ts`, `src/i18n/projects.*.ts` | Translation source of truth. Every change must be made in both `sv` and `en`. |
-| `src/i18n/routes.ts` | Routing table. Changing a slug or locale changes public URLs, and GitHub Pages cannot redirect the old ones. |
-| `.prettierrc` | Formatting config used by all contributors. |
+| Path                                         | Reason                                                                                                       |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `src/i18n/ui.*.ts`, `src/i18n/projects.*.ts` | Translation source of truth. Every change must be made in both `sv` and `en`.                                |
+| `src/i18n/routes.ts`                         | Routing table. Changing a slug or locale changes public URLs, and GitHub Pages cannot redirect the old ones. |
+| `.prettierrc`                                | Formatting config used by all contributors.                                                                  |
 
 ---
 
 ## Conventions
 
 **Component architecture** follows a strict four-tier hierarchy:
+
 - `src/components/foundation/` — SVG icons only, no logic
 - `src/components/base/` — atomic UI (button, links, labels)
 - `src/components/composites/` — assembled page sections
@@ -59,6 +60,7 @@ Each component lives in its own folder: `component-name/component-name.svelte`, 
 **Runtime:** Static. `astro build` prerenders every page to `dist/<route>/index.html`. No adapter, no middleware, no server at runtime (ADR-006).
 
 **Pages:**
+
 - `/`, `/about/`, `/portfolio/` — `src/pages/index.astro`, `about.astro`, `portfolio.astro` (Swedish, `const locale = 'sv'`)
 - `/en/` — `src/pages/[locale]/index.astro`
 - `/en/about/`, `/en/portfolio/` — `src/pages/[locale]/[slug].astro` (slugs from `routeSlugs` in `src/i18n/routes.ts`)
@@ -74,6 +76,7 @@ Each route file renders a page body from `src/components/pages/` inside `<Layout
 **View transitions:** Named MPA transitions (`.view-transition-pageTitle`, etc.) provide smooth cross-page animation. Transition names must match between paired elements.
 
 **Key utilities:**
+
 - `twMerge` — merge Tailwind classes safely
 - `getSkillClassColors()` — `src/utils/getSkillClassColors.ts` — maps tech name to color classes
 - `useTranslations(locale)` / `getProjectText(locale, slug)` — translated strings from `$lib/i18n`

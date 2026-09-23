@@ -14,12 +14,12 @@ Formatting is fully handled by Prettier — see `.prettierrc`. Run `npm run form
 
 Components follow a strict four-tier hierarchy:
 
-| Tier | Path | Purpose |
-|------|------|---------|
-| **Foundation** | `src/components/foundation/` | Raw SVG icons. No logic, no styling variation. |
-| **Base** | `src/components/base/` | Atomic UI components (buttons, links, labels). |
-| **Composites** | `src/components/composites/` | Assembled from base components. Page-level sections. |
-| **Pages** | `src/components/pages/` | One page body per route (`home-page`, `about-page`, `portfolio-page`, `project-page`), as `.astro`. Takes `locale`, plus the entry it displays for detail pages (`project-page` takes a `Project`). The exception is `not-found-page`, which takes no props and renders every locale, because one `404.html` serves both languages. |
+| Tier           | Path                         | Purpose                                                                                                                                                                                                                                                                                                                             |
+| -------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Foundation** | `src/components/foundation/` | Raw SVG icons. No logic, no styling variation.                                                                                                                                                                                                                                                                                      |
+| **Base**       | `src/components/base/`       | Atomic UI components (buttons, links, labels).                                                                                                                                                                                                                                                                                      |
+| **Composites** | `src/components/composites/` | Assembled from base components. Page-level sections.                                                                                                                                                                                                                                                                                |
+| **Pages**      | `src/components/pages/`      | One page body per route (`home-page`, `about-page`, `portfolio-page`, `project-page`), as `.astro`. Takes `locale`, plus the entry it displays for detail pages (`project-page` takes a `Project`). The exception is `not-found-page`, which takes no props and renders every locale, because one `404.html` serves both languages. |
 
 Never skip tiers — composites use base, base uses foundation. The one exception is the pages tier: a page body may use composites, base and foundation directly.
 
@@ -87,12 +87,13 @@ Never use relative paths (`../../`) to cross component directories.
 - Long-form content (experience timelines, bio paragraphs): create separate language-specific components (e.g. `swedish-experience.svelte` / `english-experience.svelte`)
 - All internal links must go through `routeHref(locale, key, param?)` from `$lib/i18n`. Never hand-write an internal path.
 - Page bodies (`src/components/pages/`) resolve text and links from their `locale` prop with `useTranslations(locale)` and `routeHref(locale, key, param?)`.
-- Components in the foundation, base and composites tiers never resolve the locale or build links themselves — no runtime imports from `$lib/i18n` there (type-only imports such as `ProjectText` are fine). The page body or layout passes already-localized `href`s and translated labels in as props (e.g. `backHref`/`backLabel` on `sub-page`, `languages` on `language-links`). The one exception is the locale-split long-form components (ADR-002), which *are* a language.
+- Components in the foundation, base and composites tiers never resolve the locale or build links themselves — no runtime imports from `$lib/i18n` there (type-only imports such as `ProjectText` are fine). The page body or layout passes already-localized `href`s and translated labels in as props (e.g. `backHref`/`backLabel` on `sub-page`, `languages` on `language-links`). The one exception is the locale-split long-form components (ADR-002), which _are_ a language.
 
 ```astro
 ---
 const { locale } = Astro.props;
 ---
+
 {locale === 'sv' ? <SwedishContent /> : <EnglishContent />}
 ```
 
@@ -119,6 +120,7 @@ TypeScript strict mode is enabled — see `tsconfig.json`. All component props m
 ## How to contribute to this file
 
 Add an entry when:
+
 - A new naming convention or file structure pattern is established
 - A code pattern is adopted project-wide (not a one-off)
 - A pattern is explicitly rejected — add it to Anti-patterns with a reason

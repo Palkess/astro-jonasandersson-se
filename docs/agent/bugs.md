@@ -9,6 +9,7 @@ Consult this file when debugging, investigating errors, or working around known 
 ## When to update this file
 
 Add an entry when:
+
 - A bug is confirmed with a reproducible case
 - A workaround is found for a known issue
 - A suspected issue is promoted to confirmed (update the label)
@@ -29,6 +30,7 @@ Add an entry when:
 **Description:** The `lang` attribute on the root `<html>` element is statically set to `"en"` and does not change when the active locale is Swedish (`sv`). This means Swedish-language pages are served with incorrect language metadata.
 
 **Impact:**
+
 - Screen readers and assistive technology will use English pronunciation rules for Swedish content
 - SEO signals for Swedish content are incorrect
 - Fails WCAG 2.2 Success Criterion 3.1.1 (Language of Page) for Swedish pages

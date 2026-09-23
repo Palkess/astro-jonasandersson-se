@@ -67,10 +67,10 @@ The site is fully static and hosted on GitHub Pages at `https://jonasandersson.s
 1. **Repo → Settings → Pages → Build and deployment → Source:** "GitHub Actions".
 2. **Settings → Pages → Custom domain:** `jonasandersson.se`. It's also worth verifying the domain under the account's Settings → Pages, so no other repo can claim it.
 3. **DNS for the apex domain** (at the registrar):
-   - `A` records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - `AAAA` records: `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`
-   - Optionally `www` as a `CNAME` to `palkess.github.io`, so `www.jonasandersson.se` redirects to the apex.
-   - Remove the old records that point at the Node server.
+    - `A` records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+    - `AAAA` records: `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`
+    - Optionally `www` as a `CNAME` to `palkess.github.io`, so `www.jonasandersson.se` redirects to the apex.
+    - Remove the old records that point at the Node server.
 4. When the DNS check passes in Pages settings, tick **Enforce HTTPS**.
 5. Once `https://jonasandersson.se/` and `/en/` serve the static build, shut down the old Node.js server.
 
@@ -79,6 +79,7 @@ The site is fully static and hosted on GitHub Pages at `https://jonasandersson.s
 ## How to contribute to this file
 
 Update this file when:
+
 - New scripts are added to `package.json`
 - The build process changes (e.g. new compile steps)
 - CI/CD is added

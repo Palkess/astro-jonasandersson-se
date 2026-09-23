@@ -17,12 +17,13 @@ Consult this file when making or evaluating architectural or design choices, or 
 **Decision:** Use SSR with `@astrojs/node` standalone adapter.
 
 **Consequences:**
+
 - Deployment requires a running Node.js process — cannot deploy to pure static hosts (Netlify/Vercel static, GitHub Pages)
 - Every page request incurs server overhead vs. serving pre-built HTML
 - Enables Paraglide's URL-based locale middleware, which requires server-side request interception
 - Enables future dynamic features (contact forms, API routes) without changing the architecture
 
-*Cross-reference: architecture.md — Request Pipeline*
+_Cross-reference: architecture.md — Request Pipeline_
 
 ---
 
@@ -31,12 +32,14 @@ Consult this file when making or evaluating architectural or design choices, or 
 **Date:** 2024 (initial build)
 
 **Context:** The site is bilingual (Swedish/English). For short UI strings, Paraglide message keys work well. For long-form content (career timeline, biography paragraphs), two approaches were considered:
+
 1. i18n message keys for every paragraph
 2. Separate Swedish and English Svelte components
 
 **Decision:** Use separate language-specific components (`swedish-experience.svelte`, `english-experience.svelte`, etc.) for long-form content.
 
 **Consequences:**
+
 - Long-form content is readable in source — no interpolated strings to scan through
 - Adding content requires editing two files instead of two JSON keys
 - Component-level locale branching: `{locale === 'sv' ? <SwedishContent /> : <EnglishContent />}`, where `locale` is the page body's prop
@@ -55,6 +58,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 **Decision:** Use `@tailwindcss/vite` Vite plugin, configured directly in `astro.config.mjs`.
 
 **Consequences:**
+
 - CSS-first configuration using `@theme`, `@layer`, `@utility`, `@plugin` in `src/styles/global.css`
 - No `tailwind.config.js` file — all customisation lives in the CSS file
 - More aligned with Tailwind v4's intended usage
@@ -71,6 +75,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 **Decision:** Adopt the SvelteKit `$lib` convention — configure a path alias mapping `$lib/*` → `./src/*` in both `tsconfig.json` and `astro.config.mjs` (vite resolve alias).
 
 **Consequences:**
+
 - All internal imports use `$lib/...` regardless of file location
 - Consistent with what Svelte developers expect
 - Requires dual configuration (TypeScript + Vite) — if one is updated without the other, types break at runtime or type-check time
@@ -88,6 +93,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 **Decision:** Strategy order: `['url', 'cookie', 'baseLocale']`. Swedish (`sv`) is the base locale.
 
 **Consequences:**
+
 - Language is reflected in the URL — SEO-friendly, shareable locale-specific links
 - Cookie allows persistence when navigating locale-ambiguous paths
 - No `Accept-Language` detection — users always start in Swedish unless they navigate to `/en/...` or have a cookie set
@@ -106,6 +112,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 **Decision:** Use Astro's default static output. Remove `output: 'server'`, the `@astrojs/node` adapter and `src/middleware.ts`. `site` is set to `https://jonasandersson.se` and no `base` is used, since the site is served from that custom domain.
 
 **Consequences:**
+
 - `npm run build` writes plain HTML to `dist/` (`/about/index.html`, `/en/about/index.html`, …). Any static host works; no Node.js process at runtime.
 - Deployed by GitHub Actions (`.github/workflows/deploy.yml`) on every push to `main`, after `astro check` and the build pass. Setup steps are in `workflows.md`.
 - Every URL has to exist as a generated file. There are no server-side redirects or rewrites — GitHub Pages can't do them — which is why existing URLs are kept as-is (ADR-007).
@@ -113,7 +120,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 - Future dynamic features (contact form, API routes) would need a third-party service or a return to an adapter.
 - Reverses the "Static prerendering individual routes" anti-pattern below, which only made sense while the middleware existed.
 
-*Cross-reference: architecture.md — Runtime Mode*
+_Cross-reference: architecture.md — Runtime Mode_
 
 ---
 
@@ -126,6 +133,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 **Context:** ADR-005's strategy (`url` → `cookie` → `baseLocale`) relied on middleware running for every request. A static site has no request to intercept, and on GitHub Pages nothing server-side can read a locale cookie.
 
 **Decision:**
+
 - Astro's built-in i18n: `defaultLocale: 'sv'`, `locales: ['sv', 'en']`, `prefixDefaultLocale: false`.
 - Swedish pages are real files at the root (`src/pages/index.astro`, `about.astro`, `portfolio.astro`), each with `const locale = 'sv'`. Other locales are generated by `src/pages/[locale]/index.astro` and `src/pages/[locale]/[slug].astro` via `getStaticPaths`, with slugs taken from `routeSlugs` in `src/i18n/routes.ts`.
 - The locale is decided by the route file and passed down as a prop (route → `Layout` → page body → components). Nothing reads a global locale.
@@ -133,14 +141,15 @@ Consult this file when making or evaluating architectural or design choices, or 
 - Slugs are identical in both locales (`/about/`, `/en/about/`), so every URL the SSR site served still works.
 
 **Consequences:**
+
 - Language stays in the URL — SEO-friendly and shareable — with `hreflang` alternates and a canonical URL on every page (`Layout.astro`).
 - Visitors always land in Swedish at `/` unless they follow an `/en/` link. The language switcher links to the same page in the other language.
-- Adding a locale means adding it to `locales` (in `astro.config.mjs` *and* `src/i18n/routes.ts`), a `ui.<locale>.ts` / `projects.<locale>.ts` dictionary, and its `routeSlugs` entries. The `[locale]` routes then generate its pages automatically.
+- Adding a locale means adding it to `locales` (in `astro.config.mjs` _and_ `src/i18n/routes.ts`), a `ui.<locale>.ts` / `projects.<locale>.ts` dictionary, and its `routeSlugs` entries. The `[locale]` routes then generate its pages automatically.
 - Adding a page means a Swedish route file, a `RouteKey` + `routeSlugs` entry, and a case in `[locale]/[slug].astro`.
 - Pages below a route (e.g. `/portfolio/<slug>/`) use `routeHref(locale, key, param)` and pass `param` to `Layout`. The non-default locales get a nested `[locale]/[slug]/[param].astro` whose middle segment comes from `routeSlugs`, as `[locale]/[slug]/[project].astro` does.
 - Adding a portfolio project needs no route changes: `getStaticPaths` in both project routes iterates `src/data/projects.ts`.
 
-*Cross-reference: architecture.md — Internationalization; conventions.md — Internationalization*
+_Cross-reference: architecture.md — Internationalization; conventions.md — Internationalization_
 
 ---
 
@@ -148,7 +157,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 
 - **Astro content collections for this site's content** — The content is small, typed inline, and tightly coupled to components. Content collections would add schema overhead and a content directory layer without meaningful benefit at this scale. Do not migrate to content collections unless the project grows significantly.
 - **React or other UI frameworks** — Svelte 5 is the chosen component framework. Adding React would double the client-side runtime. Do not add `@astrojs/react` or similar.
-- ~~**Static prerendering individual routes**~~ — *Obsolete since ADR-006: the whole site is static now.* This used to warn against mixing SSR and per-route `prerender = true` because of the locale middleware.
+- ~~**Static prerendering individual routes**~~ — _Obsolete since ADR-006: the whole site is static now._ This used to warn against mixing SSR and per-route `prerender = true` because of the locale middleware.
 - **Locale detection or redirects in the browser** — A static host can only detect language with client-side JS, which means a redirect after load: a flash of the wrong language for users and a real risk of confusing crawlers. `hreflang` already tells search engines which page is which. See ADR-007.
 
 ---
@@ -156,6 +165,7 @@ Consult this file when making or evaluating architectural or design choices, or 
 ## How to contribute to this file
 
 Add an ADR when:
+
 - A meaningful architectural choice is made that isn't obvious from the code
 - A previously considered alternative is explicitly rejected
 - An existing decision is reversed — update the original ADR with a "Superseded by ADR-XXX" note and add the new one

@@ -26,23 +26,23 @@ A portfolio entry is split in two, keyed by `slug`:
 
 `Project`:
 
-| Field | Type | Meaning |
-|-------|------|---------|
-| `slug` | `ProjectSlug` | URL identifier for the portfolio detail page, and the key into the translation files |
-| `image` | `string` | Static image path under `public/` |
-| `technologies` | `string[]` | Tech stack tags — must match known skill names for color mapping |
-| `status` | `'public' \| 'private' \| 'inprogress'` | Visibility/completion state |
-| `githubUrl` | `string \| undefined` | Link to source code if public |
-| `url` | `string` | Link to live project |
-| `releaseDate` | `string` | When the project launched (`YYYY-MM-DD`) |
+| Field          | Type                                    | Meaning                                                                              |
+| -------------- | --------------------------------------- | ------------------------------------------------------------------------------------ |
+| `slug`         | `ProjectSlug`                           | URL identifier for the portfolio detail page, and the key into the translation files |
+| `image`        | `string`                                | Static image path under `public/`                                                    |
+| `technologies` | `string[]`                              | Tech stack tags — must match known skill names for color mapping                     |
+| `status`       | `'public' \| 'private' \| 'inprogress'` | Visibility/completion state                                                          |
+| `githubUrl`    | `string \| undefined`                   | Link to source code if public                                                        |
+| `url`          | `string`                                | Link to live project                                                                 |
+| `releaseDate`  | `string`                                | When the project launched (`YYYY-MM-DD`)                                             |
 
 `ProjectText` (one per locale per project):
 
-| Field | Type | Meaning |
-|-------|------|---------|
-| `title` | `string` | Display name of the project |
+| Field              | Type     | Meaning                           |
+| ------------------ | -------- | --------------------------------- |
+| `title`            | `string` | Display name of the project       |
 | `descriptionTitle` | `string` | Short heading for the description |
-| `description` | `string` | Description paragraph |
+| `description`      | `string` | Description paragraph             |
 
 Adding a project: add its slug to the `ProjectSlug` union, its data to `src/data/projects.ts` and its text to **both** `projects.*.ts` files. `ProjectTexts` is a `Record<ProjectSlug, …>`, so a missing translation fails type-checking. Prose never goes in `src/data/`.
 
@@ -58,15 +58,16 @@ Technologies not in this list render with a neutral gray color. This is not an e
 
 ## Project Status Values
 
-| Value | Meaning |
-|-------|---------|
-| `public` | Live, publicly accessible project |
-| `private` | Built but not publicly accessible (client work, internal tools) |
-| `inprogress` | Work in progress, not yet launched |
+| Value        | Meaning                                                         |
+| ------------ | --------------------------------------------------------------- |
+| `public`     | Live, publicly accessible project                               |
+| `private`    | Built but not publicly accessible (client work, internal tools) |
+| `inprogress` | Work in progress, not yet launched                              |
 
 ## Career Context
 
 Jonas's professional history (encoded in the experience/history components):
+
 - **Tieto** — 2021 to present
 - **Alpacha AB** — 2018–2021
 - **Searchminds Group AB** — 2017–2018
@@ -78,13 +79,13 @@ This context is relevant when editing the experience or history components to en
 
 Named view transitions create matched animation pairs between pages. The names are semantic:
 
-| Name | What it animates |
-|------|-----------------|
-| `page-title` | The `<h1>` page title across navigations |
-| `profile-image` | Jonas's profile photo |
-| `top-menu` | The top navigation bar |
-| `page-content` | Main page content area |
-| `expertise-list` | The skills list on the home page |
+| Name                   | What it animates                                           |
+| ---------------------- | ---------------------------------------------------------- |
+| `page-title`           | The `<h1>` page title across navigations                   |
+| `profile-image`        | Jonas's profile photo                                      |
+| `top-menu`             | The top navigation bar                                     |
+| `page-content`         | Main page content area                                     |
+| `expertise-list`       | The skills list on the home page                           |
 | `project-image-{slug}` | Per-project image, keyed by slug for portfolio transitions |
 
 Mismatching transition names between pages breaks the animation — ensure paired elements use identical names.
@@ -94,6 +95,7 @@ Mismatching transition names between pages breaks the animation — ensure paire
 ## How to contribute to this file
 
 Add an entry when:
+
 - A domain term is used in code with a meaning that differs from common usage
 - A business rule exists that is not obvious from the code
 - A missing piece of context here would cause an agent to produce technically correct but semantically wrong output (e.g. wrong locale, broken skill color, wrong career history)

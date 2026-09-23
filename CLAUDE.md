@@ -22,11 +22,11 @@ The build prerenders every page to static HTML in `dist/` — no compile step, n
 
 > Do not modify these without explicit human review.
 
-| Path | Reason |
-|------|--------|
-| `src/i18n/ui.*.ts`, `src/i18n/projects.*.ts` | Translation source of truth. Every change must be made in both `sv` and `en`. |
-| `src/i18n/routes.ts` | Routing table. Changing a slug or locale changes public URLs, and GitHub Pages cannot redirect the old ones. |
-| `.prettierrc` | Formatting config used by all contributors. |
+| Path                                         | Reason                                                                                                       |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `src/i18n/ui.*.ts`, `src/i18n/projects.*.ts` | Translation source of truth. Every change must be made in both `sv` and `en`.                                |
+| `src/i18n/routes.ts`                         | Routing table. Changing a slug or locale changes public URLs, and GitHub Pages cannot redirect the old ones. |
+| `.prettierrc`                                | Formatting config used by all contributors.                                                                  |
 
 ---
 

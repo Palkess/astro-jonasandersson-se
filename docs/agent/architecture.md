@@ -33,18 +33,18 @@ The locale flows down as a prop. Nothing reads it from a request, cookie or glob
 
 ## Pages
 
-| Route | File | Description |
-|-------|------|-------------|
-| `/` | `src/pages/index.astro` → `home-page` | Landing page: name, subtitle, skills, profile image, nav |
-| `/about/` | `src/pages/about.astro` → `about-page` | About page: career timeline, biography |
-| `/portfolio/` | `src/pages/portfolio.astro` → `portfolio-page` | Portfolio listing: project teasers |
-| `/en/` | `src/pages/[locale]/index.astro` → `home-page` | Home page in every non-default locale |
-| `/en/about/`, `/en/portfolio/` | `src/pages/[locale]/[slug].astro` → `about-page` / `portfolio-page` | Content pages in every non-default locale; slugs from `routeSlugs` |
-| `/portfolio/<slug>/` | `src/pages/portfolio/[slug].astro` → `project-page` | One page per project in `src/data/projects.ts` |
-| `/en/portfolio/<slug>/` | `src/pages/[locale]/[slug]/[project].astro` → `project-page` | Project pages in every non-default locale; the `portfolio` segment comes from `routeSlugs` |
-| `/404.html` | `src/pages/404.astro` → `not-found-page` | Served by GitHub Pages for every missing path, in either language. Bilingual (see below) |
+| Route                          | File                                                                | Description                                                                                |
+| ------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `/`                            | `src/pages/index.astro` → `home-page`                               | Landing page: name, subtitle, skills, profile image, nav                                   |
+| `/about/`                      | `src/pages/about.astro` → `about-page`                              | About page: career timeline, biography                                                     |
+| `/portfolio/`                  | `src/pages/portfolio.astro` → `portfolio-page`                      | Portfolio listing: project teasers                                                         |
+| `/en/`                         | `src/pages/[locale]/index.astro` → `home-page`                      | Home page in every non-default locale                                                      |
+| `/en/about/`, `/en/portfolio/` | `src/pages/[locale]/[slug].astro` → `about-page` / `portfolio-page` | Content pages in every non-default locale; slugs from `routeSlugs`                         |
+| `/portfolio/<slug>/`           | `src/pages/portfolio/[slug].astro` → `project-page`                 | One page per project in `src/data/projects.ts`                                             |
+| `/en/portfolio/<slug>/`        | `src/pages/[locale]/[slug]/[project].astro` → `project-page`        | Project pages in every non-default locale; the `portfolio` segment comes from `routeSlugs` |
+| `/404.html`                    | `src/pages/404.astro` → `not-found-page`                            | Served by GitHub Pages for every missing path, in either language. Bilingual (see below)   |
 
-Swedish route files set `const locale = 'sv'`. The `[locale]` files generate the other locales with `getStaticPaths` over `locales` minus the default (constants the function needs are declared *inside* it, because Astro extracts `getStaticPaths` into its own chunk).
+Swedish route files set `const locale = 'sv'`. The `[locale]` files generate the other locales with `getStaticPaths` over `locales` minus the default (constants the function needs are declared _inside_ it, because Astro extracts `getStaticPaths` into its own chunk).
 
 Route files are thin wrappers: they fix the locale and render the matching page body from `src/components/pages/` inside `<Layout {locale} routeKey="…" title={…}>`. From `locale` + `routeKey`, `Layout.astro` derives `<html lang>`, the translated `<title>`, the canonical URL, the `hreflang` alternates (resolved against `site`), the OG tags and the language switcher's links, which point at the same page in the other language.
 
@@ -112,21 +112,22 @@ No Astro content collections. Data is inline:
 
 ## Key Utilities
 
-| Utility | Location | Purpose |
-|---------|----------|---------|
-| `$lib` alias | `tsconfig.json` + `astro.config.mjs` | Maps `$lib/*` → `./src/*` |
-| `twMerge` | `tailwind-merge` (npm) | Merge Tailwind class props safely |
-| `getSkillClassColors()` | `src/utils/getSkillClassColors.ts` | Maps tech name → Tailwind color classes |
-| `useTranslations(locale)` | `$lib/i18n` | UI strings for a locale |
-| `getProjectText(locale, slug)` | `$lib/i18n` | Portfolio project texts for a locale |
-| `routeHref(locale, key, param?)` | `$lib/i18n` | Localized internal link (trailing slash) |
-| `alternateLinks(key, param?)` | `$lib/i18n` | `hreflang` alternates for a route (used by `Layout.astro`) |
+| Utility                          | Location                             | Purpose                                                    |
+| -------------------------------- | ------------------------------------ | ---------------------------------------------------------- |
+| `$lib` alias                     | `tsconfig.json` + `astro.config.mjs` | Maps `$lib/*` → `./src/*`                                  |
+| `twMerge`                        | `tailwind-merge` (npm)               | Merge Tailwind class props safely                          |
+| `getSkillClassColors()`          | `src/utils/getSkillClassColors.ts`   | Maps tech name → Tailwind color classes                    |
+| `useTranslations(locale)`        | `$lib/i18n`                          | UI strings for a locale                                    |
+| `getProjectText(locale, slug)`   | `$lib/i18n`                          | Portfolio project texts for a locale                       |
+| `routeHref(locale, key, param?)` | `$lib/i18n`                          | Localized internal link (trailing slash)                   |
+| `alternateLinks(key, param?)`    | `$lib/i18n`                          | `hreflang` alternates for a route (used by `Layout.astro`) |
 
 ---
 
 ## How to contribute to this file
 
 Update this file when:
+
 - New pages, routes, or major components are added
 - The rendering mode changes (e.g. static prerendering is added)
 - The i18n strategy or locale list changes
