@@ -1,6 +1,6 @@
 # jonasandersson.se — Claude Code Instructions
 
-Personal portfolio and CV website for Jonas Andersson, a Swedish fullstack web developer. Built with Astro 5 (static output) + Svelte 5 + Tailwind CSS 4, bilingual (Swedish/English) via Astro's built-in i18n routing and TypeScript dictionaries in `src/i18n/`. Builds to static files, intended for GitHub Pages.
+Personal portfolio and CV website for Jonas Andersson, a Swedish fullstack web developer. Built with Astro 7 (static output) + Svelte 5 + Tailwind CSS 4, bilingual (Swedish/English) via Astro's built-in i18n routing and TypeScript dictionaries in `src/i18n/`. Builds to static files, intended for GitHub Pages.
 
 ---
 

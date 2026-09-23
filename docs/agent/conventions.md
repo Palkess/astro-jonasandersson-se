@@ -108,6 +108,17 @@ Do not mix patterns for the same type of image.
 
 TypeScript strict mode is enabled — see `tsconfig.json`. All component props must be typed. Use interfaces in a sibling `types.ts` when props are non-trivial.
 
+## Whitespace in `.astro` markup
+
+Astro 7 compresses HTML with JSX rules (`compressHTML: 'jsx'`): a line break between two elements renders as _nothing_, not as a space. Where a space is visible — text or an inline element next to another inline element, outside a flex/grid container — write it out as `{' '}`:
+
+```astro
+<span class="text-lg font-medium">{t.about.skills}:</span>{' '}
+<SkillsList {skills} />
+```
+
+Svelte components are not affected; Svelte keeps its own whitespace rules.
+
 ## Anti-patterns
 
 - **Do not use relative paths across component directories** — We tried this; it breaks path portability when files move and is inconsistent with the rest of the codebase. Use `$lib/...` always.

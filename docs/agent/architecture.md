@@ -8,7 +8,7 @@ Consult this file when navigating the codebase, proposing structural changes, or
 
 ## Overview
 
-Personal portfolio/CV website for Jonas Andersson. Built with Astro 5 (static output) + Svelte 5 + Tailwind CSS 4, bilingual (Swedish/English) through Astro's built-in i18n routing and TypeScript dictionaries in `src/i18n/`. Deployed as static files.
+Personal portfolio/CV website for Jonas Andersson. Built with Astro 7 (static output) + Svelte 5 + Tailwind CSS 4, bilingual (Swedish/English) through Astro's built-in i18n routing and TypeScript dictionaries in `src/i18n/`. Deployed as static files.
 
 ## Runtime Mode
 

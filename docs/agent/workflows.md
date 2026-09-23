@@ -30,6 +30,8 @@ npm run preview
 
 Serves `dist/` locally, like a static host would, for testing before deployment.
 
+On Astro 7, `astro preview` detaches into a background server when it's started without a terminal (e.g. by an agent) or with `--background`. Check it with `npx astro preview status` and stop it with `npx astro preview stop`, since it outlives the shell that started it.
+
 ## Type-check
 
 ```bash

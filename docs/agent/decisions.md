@@ -204,6 +204,28 @@ _Cross-reference: architecture.md — Internationalization_
 
 ---
 
+## ADR-010: Astro 7
+
+**Date:** 2026-09-23
+
+**Status:** Resolves the migration plan's D4 ("stay on Astro 5, upgrade separately"). Matches the sibling project `astro-olandsstuguthyrning-com` (its ADR-010).
+
+**Context:** The site was on Astro 5.18. The sibling project is on Astro 7, and the two share their i18n and deployment architecture, so keeping them on the same major keeps fixes portable.
+
+**Decision:** `astro` ^7.3.4, `@astrojs/svelte` ^9.0.1 (the major paired with Astro 7), Vite 8 (via Astro), `@tailwindcss/vite` + `tailwindcss` ^4.3.3, `svelte` ^5.57.0 (the installed 5.53 had moderate security advisories). No config or API changes were needed: this site uses none of the APIs removed in v6/v7 (content collections, `Astro.glob`, `<ViewTransitions />`, `@astrojs/db`, Markdown), and `redirectToDefaultLocale`, whose default changed in v6, doesn't apply with `prefixDefaultLocale: false`.
+
+**Consequences:**
+
+- **Whitespace:** `compressHTML` now defaults to `'jsx'`, which drops whitespace between elements. The one place where that showed (the skills label on the About page) got an explicit `{' '}`; everywhere else the gaps sit between blocks or inside flex/grid containers. See conventions.md — Whitespace in `.astro` markup.
+- **Rust compiler:** unclosed or invalid HTML in `.astro` files is now a build error instead of being auto-corrected.
+- **Tailwind 4.3** changes the default `--font-sans` stack from `ui-sans-serif, system-ui, …` to `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, …`. Same font on macOS and Windows; on Linux/Android it can differ. The site doesn't set its own font. CSS media queries are now emitted in range syntax (`width>=48rem`), supported by all current browsers.
+- `astro preview` can run as a background daemon (workflows.md — Preview).
+- Requires Node 22+. CI uses Node 24.
+
+_Cross-reference: skills.md — Core Stack_
+
+---
+
 ## Anti-patterns
 
 - **Astro content collections for this site's content** — The content is small, typed inline, and tightly coupled to components. Content collections would add schema overhead and a content directory layer without meaningful benefit at this scale. Do not migrate to content collections unless the project grows significantly.
