@@ -1,46 +1,57 @@
-# Astro Starter Kit: Basics
+# jonasandersson.se
+
+Personal portfolio and CV website for Jonas Andersson, a Swedish fullstack web developer. Live at [jonasandersson.se](https://jonasandersson.se).
+
+Built with [Astro 7](https://astro.build) (static output), [Svelte 5](https://svelte.dev) and [Tailwind CSS 4](https://tailwindcss.com). Available in Swedish (default, `/`) and English (`/en/`).
+
+## Getting started
+
+Requires Node 22 or later.
 
 ```sh
-npm create astro@latest -- --template basics
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The dev server runs at `http://localhost:4321`.
 
-## 🚀 Project Structure
+## Commands
 
-Inside of your Astro project, you'll see the following folders and files:
+| Command           | Action                                                      |
+| :---------------- | :---------------------------------------------------------- |
+| `npm run dev`     | Start the dev server at `localhost:4321`                    |
+| `npm run build`   | Build the static site to `./dist/`                          |
+| `npm run preview` | Serve the production build locally                          |
+| `npm run check`   | Type-check `.astro`, `.svelte` and `.ts` files (runs in CI) |
+| `npm run format`  | Format all files with Prettier                              |
+
+## Project structure
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+src/
+├── components/
+│   ├── foundation/   SVG icons
+│   ├── base/         Atomic UI components (buttons, links, labels)
+│   ├── composites/   Sections built from base components, incl. the cookie consent banner
+│   └── pages/        One page body per route, takes `locale`
+├── data/             Portfolio projects (locale-invariant data)
+├── i18n/             Routing table and Swedish/English dictionaries
+├── layouts/          Layout.astro: <head>, hreflang, language switcher, menu, footer
+├── pages/            Thin route files; Swedish at the root, other locales under [locale]/
+├── styles/           global.css (Tailwind theme and custom utilities)
+└── utils/
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Internationalization
 
-## 🧞 Commands
+There is no i18n library. Routing uses Astro's built-in i18n with Swedish unprefixed and English under `/en/`; the URL alone decides the language. UI strings live in `src/i18n/ui.{sv,en}.ts` and portfolio texts in `src/i18n/projects.{sv,en}.ts`. Swedish is the source of truth, so the English files fail type-checking until they match. Long-form content (career history, privacy policy) is written as separate Swedish and English components.
 
-All commands are run from the root of the project, from a terminal:
+## Deployment
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Every push to `main` runs `.github/workflows/deploy.yml` (check → build → deploy to GitHub Pages). If the check or build fails, nothing is deployed.
 
-## 👀 Want to learn more?
+Google Tag Manager is loaded only after a visitor accepts the cookie banner. The container id comes from the `PUBLIC_GTM_ID` repository variable; while it's unset, the build contains no GTM code.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Documentation
+
+Architecture, conventions, design decisions and workflows are documented in [`docs/agent/`](docs/agent/), with [`AGENTS.md`](AGENTS.md) as the entry point.
