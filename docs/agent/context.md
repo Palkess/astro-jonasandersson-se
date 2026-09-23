@@ -67,7 +67,7 @@ Technologies not in this list render with a neutral gray color. This is not an e
 ## Career Context
 
 Jonas's professional history (encoded in the experience/history components):
-- **Tietoevry** — 2021 to present
+- **Tieto** — 2021 to present
 - **Alpacha AB** — 2018–2021
 - **Searchminds Group AB** — 2017–2018
 - **BTH (Blekinge Institute of Technology)** — Teaching assistant 2016–2017

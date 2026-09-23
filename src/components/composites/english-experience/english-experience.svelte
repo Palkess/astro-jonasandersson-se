@@ -7,7 +7,7 @@
 <ul class="timeline mb-4">
     <li class="flex flex-col">
         <span class="font-medium">Software Developer</span>
-        <span class="text-sm">Tietoevry</span>
+        <span class="text-sm">Tieto</span>
         <span class="text-sm">2021 - Ongoing</span>
     </li>
     <li class="flex flex-col">
