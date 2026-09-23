@@ -2,10 +2,12 @@
 /** Swedish home page — `/`. English is served by `[locale]/index.astro`. */
 import Layout from '$lib/layouts/Layout.astro';
 import HomePage from '$lib/components/pages/home-page/home-page.astro';
+import { useTranslations } from '$lib/i18n';
 
 const locale = 'sv' as const;
+const t = useTranslations(locale);
 ---
 
-<Layout {locale} routeKey="home">
+<Layout {locale} routeKey="home" description={t.meta.homeDescription}>
     <HomePage {locale} />
 </Layout>

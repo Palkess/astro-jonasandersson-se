@@ -10,7 +10,15 @@ export const uiSv = {
         siteTitle:
             'Jonas Andersson - Fullstack webbutvecklare | Svelte, Angular, Vue, React | Tillgänglighet i benmärgen',
         aboutTitle: 'Om mig',
-        portfolioTitle: 'Portfolio'
+        portfolioTitle: 'Portfolio',
+        homeDescription:
+            'Jonas Andersson – fullstack webbutvecklare från Öland/Kalmar som bygger tillgängliga, användarvänliga webbplatser med Svelte, Angular, Vue och React.',
+        aboutDescription:
+            'Lär känna Jonas: fullstack webbutvecklare på Tieto med erfarenhet från design till produktion, tidigare på Alpacha och Searchminds. Uppvuxen på Öland.',
+        portfolioDescription:
+            'Webbplatser som Jonas Andersson har byggt, från stuguthyrning till fotvårdsklinik på Öland – statiska Astro-sidor med fokus på tillgänglighet och prestanda.',
+        ogImageAlt:
+            'Skärmbild av startsidan: Jonas Andersson, fullstack webbutvecklare, med teknik-taggar (Svelte, Typescript, Angular, Vue, Node, .NET) och en rund bild på Jonas.'
     },
 
     nav: {

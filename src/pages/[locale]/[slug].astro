@@ -37,9 +37,13 @@ const { locale, routeKey } = Astro.props;
 const t = useTranslations(locale);
 
 const title = { about: t.meta.aboutTitle, portfolio: t.meta.portfolioTitle }[routeKey];
+const description = {
+    about: t.meta.aboutDescription,
+    portfolio: t.meta.portfolioDescription
+}[routeKey];
 ---
 
-<Layout {locale} {routeKey} {title}>
+<Layout {locale} {routeKey} {title} {description}>
     {routeKey === 'about' && <AboutPage {locale} />}
     {routeKey === 'portfolio' && <PortfolioPage {locale} />}
 </Layout>

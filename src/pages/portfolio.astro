@@ -8,6 +8,10 @@ const locale = 'sv' as const;
 const t = useTranslations(locale);
 ---
 
-<Layout {locale} routeKey="portfolio" title={t.meta.portfolioTitle}>
+<Layout
+    {locale}
+    routeKey="portfolio"
+    title={t.meta.portfolioTitle}
+    description={t.meta.portfolioDescription}>
     <PortfolioPage {locale} />
 </Layout>

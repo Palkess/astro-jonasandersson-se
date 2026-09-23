@@ -5,7 +5,15 @@ export const uiEn: UiStrings = {
         siteTitle:
             'Jonas Andersson - Fullstack web developer | Svelte, Angular, Vue, React | Accessibility through and through',
         aboutTitle: 'About me',
-        portfolioTitle: 'Portfolio'
+        portfolioTitle: 'Portfolio',
+        homeDescription:
+            'Jonas Andersson is a fullstack web developer from Öland/Kalmar, Sweden, building accessible, user-friendly websites with Svelte, Angular, Vue and React.',
+        aboutDescription:
+            'Meet Jonas: fullstack web developer at Tieto with experience from design to production, previously at Alpacha and Searchminds. Raised on Öland, Sweden.',
+        portfolioDescription:
+            'Websites built by Jonas Andersson, from holiday cottage rentals to a foot care clinic on Öland – static Astro sites focused on accessibility and performance.',
+        ogImageAlt:
+            'Screenshot of the home page: Jonas Andersson, fullstack web developer, with tech tags (Svelte, Typescript, Angular, Vue, Node, .NET) and a round photo of Jonas.'
     },
 
     nav: {
