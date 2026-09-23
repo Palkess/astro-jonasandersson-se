@@ -14,7 +14,7 @@ Personal portfolio/CV website for Jonas Andersson. Built with Astro 5 (static ou
 
 **Static.** `astro.config.mjs` uses Astro's default static output — no adapter, no middleware. `npm run build` prerenders every page to `dist/` as `<route>/index.html`, and any static host can serve it; the intended host is GitHub Pages on the `jonasandersson.se` custom domain (`site` is set, no `base`). There is no server at runtime, so there are no redirects or rewrites, and render-time values such as the footer's year are fixed at build time.
 
-No Svelte component is hydrated (no `client:` directives), so pages ship no framework JS.
+One Svelte component is hydrated: the cookie consent banner (`cookie-consent`, `client:load` in `Layout.astro`), which is also the only thing allowed to load Google Tag Manager, and only after an explicit accept (ADR-008). Everything else renders to plain HTML with no framework JS.
 
 Until 2026-09 the site was SSR with `@astrojs/node`, and Paraglide JS handled i18n through middleware. See ADR-006 / ADR-007 in `decisions.md`.
 
@@ -33,16 +33,17 @@ The locale flows down as a prop. Nothing reads it from a request, cookie or glob
 
 ## Pages
 
-| Route                          | File                                                                | Description                                                                                |
-| ------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `/`                            | `src/pages/index.astro` → `home-page`                               | Landing page: name, subtitle, skills, profile image, nav                                   |
-| `/about/`                      | `src/pages/about.astro` → `about-page`                              | About page: career timeline, biography                                                     |
-| `/portfolio/`                  | `src/pages/portfolio.astro` → `portfolio-page`                      | Portfolio listing: project teasers                                                         |
-| `/en/`                         | `src/pages/[locale]/index.astro` → `home-page`                      | Home page in every non-default locale                                                      |
-| `/en/about/`, `/en/portfolio/` | `src/pages/[locale]/[slug].astro` → `about-page` / `portfolio-page` | Content pages in every non-default locale; slugs from `routeSlugs`                         |
-| `/portfolio/<slug>/`           | `src/pages/portfolio/[slug].astro` → `project-page`                 | One page per project in `src/data/projects.ts`                                             |
-| `/en/portfolio/<slug>/`        | `src/pages/[locale]/[slug]/[project].astro` → `project-page`        | Project pages in every non-default locale; the `portfolio` segment comes from `routeSlugs` |
-| `/404.html`                    | `src/pages/404.astro` → `not-found-page`                            | Served by GitHub Pages for every missing path, in either language. Bilingual (see below)   |
+| Route                                          | File                                                                                 | Description                                                                                     |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `/`                                            | `src/pages/index.astro` → `home-page`                                                | Landing page: name, subtitle, skills, profile image, nav                                        |
+| `/about/`                                      | `src/pages/about.astro` → `about-page`                                               | About page: career timeline, biography                                                          |
+| `/portfolio/`                                  | `src/pages/portfolio.astro` → `portfolio-page`                                       | Portfolio listing: project teasers                                                              |
+| `/en/`                                         | `src/pages/[locale]/index.astro` → `home-page`                                       | Home page in every non-default locale                                                           |
+| `/privacy/`                                    | `src/pages/privacy.astro` → `privacy-page`                                           | Privacy policy (cookies, analytics, GDPR rights); linked from the footer and the consent banner |
+| `/en/about/`, `/en/portfolio/`, `/en/privacy/` | `src/pages/[locale]/[slug].astro` → `about-page` / `portfolio-page` / `privacy-page` | Content pages in every non-default locale; slugs from `routeSlugs`                              |
+| `/portfolio/<slug>/`                           | `src/pages/portfolio/[slug].astro` → `project-page`                                  | One page per project in `src/data/projects.ts`                                                  |
+| `/en/portfolio/<slug>/`                        | `src/pages/[locale]/[slug]/[project].astro` → `project-page`                         | Project pages in every non-default locale; the `portfolio` segment comes from `routeSlugs`      |
+| `/404.html`                                    | `src/pages/404.astro` → `not-found-page`                                             | Served by GitHub Pages for every missing path, in either language. Bilingual (see below)        |
 
 Swedish route files set `const locale = 'sv'`. The `[locale]` files generate the other locales with `getStaticPaths` over `locales` minus the default (constants the function needs are declared _inside_ it, because Astro extracts `getStaticPaths` into its own chunk).
 
@@ -63,12 +64,15 @@ Base (src/components/base/)
 
 Composites (src/components/composites/)
   └─ project-teaser, sub-page
+  └─ cookie-consent                            ← the only `client:` island (ADR-008)
   └─ swedish-experience, english-experience   ← locale-split content
   └─ swedish-history, english-history         ← locale-split content
+  └─ swedish-privacy-policy, english-privacy-policy ← locale-split content
 
 Pages (src/components/pages/)
   └─ home-page, about-page, portfolio-page     ← one body per route, takes `locale`
   └─ project-page                              ← one portfolio project, takes `locale` + `project`
+  └─ privacy-page                              ← the privacy policy, takes `locale`
   └─ not-found-page                            ← the 404 page, bilingual, takes no props
 ```
 

@@ -118,6 +118,7 @@ _Cross-reference: architecture.md — Request Pipeline_
 - Every URL has to exist as a generated file. There are no server-side redirects or rewrites — GitHub Pages can't do them — which is why existing URLs are kept as-is (ADR-007).
 - Anything computed at render time is frozen at build time (e.g. the footer's copyright year updates on redeploy).
 - Future dynamic features (contact form, API routes) would need a third-party service or a return to an adapter.
+- **Update (2026-09-23):** the context's "no Svelte component is hydrated" no longer holds: the cookie consent banner is a `client:load` island (ADR-008). Nothing else about this decision changes.
 - Reverses the "Static prerendering individual routes" anti-pattern below, which only made sense while the middleware existed.
 
 _Cross-reference: architecture.md — Runtime Mode_
@@ -150,6 +151,33 @@ _Cross-reference: architecture.md — Runtime Mode_
 - Adding a portfolio project needs no route changes: `getStaticPaths` in both project routes iterates `src/data/projects.ts`.
 
 _Cross-reference: architecture.md — Internationalization; conventions.md — Internationalization_
+
+---
+
+## ADR-008: Cookie consent island gates Google Tag Manager
+
+**Date:** 2026-09-23
+
+**Status:** Copies the approach of the sibling project `astro-olandsstuguthyrning-com` (its `CookieConsent.svelte`).
+
+**Context:** The site is to get analytics through Google Tag Manager. Its visitors are mostly Swedish/EU, so analytics cookies need prior, explicit consent (GDPR/ePrivacy). A static site has no server that could decide whether to include the GTM snippet, so the decision has to happen in the browser.
+
+**Decision:**
+
+- `src/components/composites/cookie-consent/cookie-consent.svelte`, rendered by `Layout.astro` with `client:load`. It is the site's only hydrated component.
+- GTM is injected **only** after an explicit accept, and on later visits only if the stored choice is `granted`. Declining or ignoring the banner means no GTM script, no analytics cookie and no request to Google.
+- The choice is stored in `localStorage` under `analytics-consent` (`granted` / `denied`), not in a cookie. If storage is unavailable, the choice just isn't remembered.
+- The container id is `PUBLIC_GTM_ID`, a GitHub Actions repository **variable** (not a secret: it ends up in the client bundle by design), passed to the build in `deploy.yml`. While it is unset, the GTM loader is dropped from the bundle entirely.
+- The banner links to a privacy policy at `/privacy/` and `/en/privacy/` (new `privacy` route key; slugs are identical in both locales, like the other routes). The policy is long-form text, so it lives in `swedish-privacy-policy` / `english-privacy-policy` (ADR-002) rather than in the dictionaries as in the sibling project. `Layout.astro` also links it from the footer.
+- There is no "change your choice" control; visitors reset it by clearing site data, which the policy says.
+
+**Consequences:**
+
+- Pages now ship a small amount of JS (Svelte runtime + the island) — the "no framework JS" property of ADR-006 no longer holds.
+- The privacy policy states the consent behaviour as fact. If analytics, a form or anything else that handles personal data is added or changed, the policy changes in the same commit.
+- Setting or changing `PUBLIC_GTM_ID` needs a rebuild (re-running the last deploy is enough).
+
+_Cross-reference: context.md — GDPR; workflows.md — Deployment → Environment_
 
 ---
 

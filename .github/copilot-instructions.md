@@ -57,13 +57,14 @@ Each component lives in its own folder: `component-name/component-name.svelte`, 
 
 ## Architecture
 
-**Runtime:** Static. `astro build` prerenders every page to `dist/<route>/index.html`. No adapter, no middleware, no server at runtime (ADR-006).
+**Runtime:** Static. `astro build` prerenders every page to `dist/<route>/index.html`. No adapter, no middleware, no server at runtime (ADR-006). The only hydrated component is the cookie consent banner (`client:load`), which loads Google Tag Manager only after an explicit accept (ADR-008).
 
 **Pages:**
 
 - `/`, `/about/`, `/portfolio/` — `src/pages/index.astro`, `about.astro`, `portfolio.astro` (Swedish, `const locale = 'sv'`)
 - `/en/` — `src/pages/[locale]/index.astro`
-- `/en/about/`, `/en/portfolio/` — `src/pages/[locale]/[slug].astro` (slugs from `routeSlugs` in `src/i18n/routes.ts`)
+- `/privacy/` — `src/pages/privacy.astro`, rendered by `privacy-page` (locale-split policy text); linked from the footer and the consent banner
+- `/en/about/`, `/en/portfolio/`, `/en/privacy/` — `src/pages/[locale]/[slug].astro` (slugs from `routeSlugs` in `src/i18n/routes.ts`)
 - `/portfolio/<slug>/` — `src/pages/portfolio/[slug].astro`; `/en/portfolio/<slug>/` — `src/pages/[locale]/[slug]/[project].astro`. One page per project in `src/data/projects.ts`, rendered by `project-page`
 - `/404.html` — `src/pages/404.astro`, rendered by `not-found-page`. GitHub Pages serves it for every missing path in either language, so it shows the message in both languages (Swedish first, each block with its own `lang`) and passes no `routeKey` to `Layout`: no canonical or `hreflang`, `noindex`, and the switcher links to each language's home page
 
@@ -89,6 +90,7 @@ Each route file renders a page body from `src/components/pages/` inside `<Layout
 
 - **Static output (ADR-006):** Deployed to GitHub Pages by GitHub Actions on every push to `main`; no server, so no redirects or per-request logic. Replaced the original SSR + Paraglide middleware setup.
 - **Locale routing via Astro i18n (ADR-007):** Swedish unprefixed, English under `/en/`; locale fixed per route file and passed as a prop; no locale cookie or detection.
+- **Cookie consent gates GTM (ADR-008):** `cookie-consent.svelte` is the only island; GTM (`PUBLIC_GTM_ID`, a repo variable) loads only after an explicit accept, the choice is kept in `localStorage`. Never load analytics unconditionally, and keep the privacy policy true in both languages.
 - **Separate language components for long-form content:** Career timelines and biographies are separate `.svelte` files per locale rather than i18n keys, to keep content readable in source.
 - **Tailwind v4 via Vite plugin:** CSS-first config in `src/styles/global.css` using `@theme`/`@layer`/`@utility`. No `tailwind.config.js`.
 - **`$lib` alias:** SvelteKit convention imported into Astro for consistent, portable imports.

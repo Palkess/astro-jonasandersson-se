@@ -1,6 +1,7 @@
 ---
 /**
- * The page shell: head metadata, top menu, footer. Every route renders through this.
+ * The page shell: head metadata, top menu, footer and the cookie consent banner.
+ * Every route renders through this.
  *
  * It derives `lang`, the canonical URL, the `hreflang` alternates and the
  * language switcher from `locale` + `routeKey` (+ `param`) rather than taking them as props,
@@ -13,6 +14,7 @@
 import '../styles/global.css';
 import SocialLinks from '$lib/components/base/social-links/social-links.svelte';
 import LanguageLinks from '$lib/components/base/language-links/language-links.svelte';
+import CookieConsent from '$lib/components/composites/cookie-consent/cookie-consent.svelte';
 import {
     alternateLinks,
     locales,
@@ -102,12 +104,23 @@ const languages = locales.map((code) => ({
             <slot />
 
             <footer>
-                <div class="container mx-auto my-8">
-                    <p class="text-center text-sm">
+                <div class="container mx-auto my-8 flex flex-col items-center gap-2 text-sm">
+                    <p class="text-center">
                         Copyright © {new Date().getFullYear()} Jonas Andersson
                     </p>
+                    <a class="link" href={routeHref(locale, 'privacy')}>{t.nav.privacy}</a>
                 </div>
             </footer>
+
+            <CookieConsent
+                client:load
+                heading={t.cookies.heading}
+                body={t.cookies.body}
+                accept={t.cookies.accept}
+                decline={t.cookies.decline}
+                readMore={t.cookies.readMore}
+                privacyHref={routeHref(locale, 'privacy')}
+            />
         </div>
     </body>
 </html>

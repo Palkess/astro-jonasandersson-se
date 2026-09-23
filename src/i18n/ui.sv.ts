@@ -12,6 +12,9 @@ export const uiSv = {
         aboutTitle: 'Om mig',
         portfolioTitle: 'Portfolio',
         notFoundTitle: 'Sidan hittades inte',
+        privacyTitle: 'Integritetspolicy',
+        privacyDescription:
+            'Hur jonasandersson.se hanterar personuppgifter och cookies: ingen analys laddas utan ditt samtycke, och webbplatsen samlar inte in några uppgifter själv.',
         homeDescription:
             'Jonas Andersson – fullstack webbutvecklare från Öland/Kalmar som bygger tillgängliga, användarvänliga webbplatser med Svelte, Angular, Vue och React.',
         aboutDescription:
@@ -26,7 +29,8 @@ export const uiSv = {
         home: 'Hem',
         about: 'Vem är jag?',
         portfolio: 'Portfolio',
-        back: 'Gå tillbaka'
+        back: 'Gå tillbaka',
+        privacy: 'Integritetspolicy'
     },
 
     common: {
@@ -50,6 +54,14 @@ export const uiSv = {
         usedTech: 'Använda tekniker',
         gotoWebpage: 'Gå till webbplatsen',
         release: 'Release'
+    },
+
+    cookies: {
+        heading: 'Cookies',
+        body: 'Jag vill gärna använda analyscookies för att se hur webbplatsen används. Inget laddas förrän du väljer.',
+        accept: 'Tillåt analys',
+        decline: 'Endast nödvändiga',
+        readMore: 'Läs mer i integritetspolicyn'
     },
 
     notFound: {

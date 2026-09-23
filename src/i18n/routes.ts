@@ -27,13 +27,14 @@ export const localeTags: Record<Locale, string> = {
     en: 'en'
 };
 
-export type RouteKey = 'home' | 'about' | 'portfolio';
+export type RouteKey = 'home' | 'about' | 'portfolio' | 'privacy';
 
 /** Path segment per route per locale. `home` has no segment of its own. */
 export const routeSlugs: Record<RouteKey, Record<Locale, string>> = {
     home: { sv: '', en: '' },
     about: { sv: 'about', en: 'about' },
-    portfolio: { sv: 'portfolio', en: 'portfolio' }
+    portfolio: { sv: 'portfolio', en: 'portfolio' },
+    privacy: { sv: 'privacy', en: 'privacy' }
 };
 
 export function isLocale(value: string | undefined): value is Locale {

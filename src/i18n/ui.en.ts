@@ -7,6 +7,9 @@ export const uiEn: UiStrings = {
         aboutTitle: 'About me',
         portfolioTitle: 'Portfolio',
         notFoundTitle: 'Page not found',
+        privacyTitle: 'Privacy policy',
+        privacyDescription:
+            'How jonasandersson.se handles personal data and cookies: no analytics load without your consent, and the site itself collects no data.',
         homeDescription:
             'Jonas Andersson is a fullstack web developer from Öland/Kalmar, Sweden, building accessible, user-friendly websites with Svelte, Angular, Vue and React.',
         aboutDescription:
@@ -21,7 +24,8 @@ export const uiEn: UiStrings = {
         home: 'Home',
         about: 'Who am I?',
         portfolio: 'Portfolio',
-        back: 'Go back'
+        back: 'Go back',
+        privacy: 'Privacy policy'
     },
 
     common: {
@@ -45,6 +49,14 @@ export const uiEn: UiStrings = {
         usedTech: 'Used technologies',
         gotoWebpage: 'Go to webpage',
         release: 'Release'
+    },
+
+    cookies: {
+        heading: 'Cookies',
+        body: "I'd like to use analytics cookies to see how the site is used. Nothing loads until you choose.",
+        accept: 'Allow analytics',
+        decline: 'Only necessary',
+        readMore: 'Read more in the privacy policy'
     },
 
     notFound: {

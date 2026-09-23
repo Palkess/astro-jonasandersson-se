@@ -1,0 +1,29 @@
+---
+import PageTitle from '$lib/components/base/page-title/page-title.svelte';
+import SubPage from '$lib/components/composites/sub-page/sub-page.svelte';
+import SwedishPrivacyPolicy from '$lib/components/composites/swedish-privacy-policy/swedish-privacy-policy.svelte';
+import EnglishPrivacyPolicy from '$lib/components/composites/english-privacy-policy/english-privacy-policy.svelte';
+import { routeHref, useTranslations, type Locale } from '$lib/i18n';
+
+interface Props {
+    locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<main class="flex flex-col items-center justify-center p-2">
+    <div class="container">
+        <PageTitle>
+            {t.meta.privacyTitle}
+        </PageTitle>
+
+        <SubPage
+            class="mb-8 max-w-3xl text-lg *:not-last:mb-4 [&_h2]:mt-8 [&_h2]:text-2xl"
+            backHref={routeHref(locale, 'home')}
+            backLabel={t.nav.back}>
+            {locale === 'sv' ? <SwedishPrivacyPolicy /> : <EnglishPrivacyPolicy />}
+        </SubPage>
+    </div>
+</main>

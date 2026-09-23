@@ -92,6 +92,10 @@ Mismatching transition names between pages breaks the animation — ensure paire
 
 ---
 
+## GDPR
+
+The site targets Swedish/EU visitors. Google Tag Manager loads **only** after explicit opt-in via the cookie banner (ADR-008). Never load GTM or any analytics unconditionally. The site itself collects no personal data — there are no forms — and the privacy policy (`swedish-privacy-policy` / `english-privacy-policy`) says so; keep it true, in both languages.
+
 ## How to contribute to this file
 
 Add an entry when:

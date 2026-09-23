@@ -1,0 +1,17 @@
+---
+/** Swedish privacy policy — `/privacy/`. English is served by `[locale]/[slug].astro`. */
+import Layout from '$lib/layouts/Layout.astro';
+import PrivacyPage from '$lib/components/pages/privacy-page/privacy-page.astro';
+import { useTranslations } from '$lib/i18n';
+
+const locale = 'sv' as const;
+const t = useTranslations(locale);
+---
+
+<Layout
+    {locale}
+    routeKey="privacy"
+    title={t.meta.privacyTitle}
+    description={t.meta.privacyDescription}>
+    <PrivacyPage {locale} />
+</Layout>

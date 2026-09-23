@@ -62,6 +62,18 @@ The site is fully static and hosted on GitHub Pages at `https://jonasandersson.s
 
 `public/CNAME` holds the custom domain. With an Actions-based deploy, GitHub takes the domain from the repo's Pages settings rather than from this file, so the settings are what actually matter; the file is kept for parity with the sibling project.
 
+### Environment
+
+`PUBLIC_GTM_ID` is a **repository variable** (not a secret — it ends up in the client bundle by design). Set it in Settings → Secrets and variables → Actions → Variables. `deploy.yml` passes it to the build.
+
+While it is unset, Vite inlines it as `undefined` and the GTM loader is dropped from `cookie-consent` entirely — the built JS contains no reference to `googletagmanager.com`, and accepting the banner records the choice and does nothing else. **Setting the variable requires a rebuild**; re-running the last deploy is enough. To test locally, prefix the build: `PUBLIC_GTM_ID=GTM-XXXXXXX npm run build`.
+
+To confirm on any build:
+
+```bash
+grep -r googletagmanager dist/    # no match ⇒ no GTM in the bundle
+```
+
 ### One-time setup (repo owner)
 
 1. **Repo → Settings → Pages → Build and deployment → Source:** "GitHub Actions".
