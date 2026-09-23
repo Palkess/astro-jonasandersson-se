@@ -82,7 +82,7 @@ Each route file renders a page body from `src/components/pages/` inside `<Layout
 - `getSkillClassColors()` — `src/utils/getSkillClassColors.ts` — maps tech name to color classes
 - `useTranslations(locale)` / `getProjectText(locale, slug)` — translated strings from `$lib/i18n`
 - `routeHref(locale, key, param?)` — localized internal links from `$lib/i18n` (trailing slash)
-- `alternateLinks(key)` — `hreflang` alternates, used by `Layout.astro`
+- `alternateLinks(key)` — `hreflang` alternates, used by `Layout.astro`; `alternatePaths(pathname)` in `src/i18n/routes.ts` is its `astro:i18n`-free twin for the sitemap
 
 ---
 
@@ -91,6 +91,7 @@ Each route file renders a page body from `src/components/pages/` inside `<Layout
 - **Static output (ADR-006):** Deployed to GitHub Pages by GitHub Actions on every push to `main`; no server, so no redirects or per-request logic. Replaced the original SSR + Paraglide middleware setup.
 - **Locale routing via Astro i18n (ADR-007):** Swedish unprefixed, English under `/en/`; locale fixed per route file and passed as a prop; no locale cookie or detection.
 - **Cookie consent gates GTM (ADR-008):** `cookie-consent.svelte` is the only island; GTM (`PUBLIC_GTM_ID`, a repo variable) loads only after an explicit accept, the choice is kept in `localStorage`. Never load analytics unconditionally, and keep the privacy policy true in both languages.
+- **Sitemap alternates from `routeSlugs` (ADR-009):** `@astrojs/sitemap` gets its `hreflang` links from `alternatePaths()`, not its own `i18n` option. A new route key needs a case in `matchRoute()`.
 - **Separate language components for long-form content:** Career timelines and biographies are separate `.svelte` files per locale rather than i18n keys, to keep content readable in source.
 - **Tailwind v4 via Vite plugin:** CSS-first config in `src/styles/global.css` using `@theme`/`@layer`/`@utility`. No `tailwind.config.js`.
 - **`$lib` alias:** SvelteKit convention imported into Astro for consistent, portable imports.

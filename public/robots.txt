@@ -1,0 +1,7 @@
+# Crawling is allowed everywhere. The 404 page is kept out of search by a
+# `noindex` meta tag instead (src/layouts/Layout.astro) — blocking crawling here
+# would NOT prevent indexing, it would only stop Google reading the noindex.
+User-agent: *
+Disallow:
+
+Sitemap: https://jonasandersson.se/sitemap-index.xml

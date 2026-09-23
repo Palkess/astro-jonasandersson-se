@@ -87,6 +87,7 @@ Composites are assembled from Base components. Page bodies use composites, base 
 - **Strings:** `src/i18n/ui.{sv,en}.ts` (UI) and `src/i18n/projects.{sv,en}.ts` (portfolio), read with `useTranslations(locale)` / `getProjectText(locale, slug)`.
 - **Links:** `routeHref(locale, key, param?)`, via Astro's `getRelativeLocaleUrl`. Always emits a trailing slash.
 - **Long-form content:** separate Swedish/English components (ADR-002).
+- **Sitemap:** `@astrojs/sitemap` writes `dist/sitemap-index.xml` (linked from `public/robots.txt`). Its `hreflang` alternates come from `alternatePaths()` in `routes.ts`, which mirrors `alternateLinks()` without needing `astro:i18n` (ADR-009). A new route key needs a case in `matchRoute()`.
 
 ## Styling
 
@@ -125,6 +126,7 @@ No Astro content collections. Data is inline:
 | `getProjectText(locale, slug)`   | `$lib/i18n`                          | Portfolio project texts for a locale                       |
 | `routeHref(locale, key, param?)` | `$lib/i18n`                          | Localized internal link (trailing slash)                   |
 | `alternateLinks(key, param?)`    | `$lib/i18n`                          | `hreflang` alternates for a route (used by `Layout.astro`) |
+| `alternatePaths(pathname)`       | `$lib/i18n/routes`                   | The same alternates without `astro:i18n`, for the sitemap  |
 
 ---
 

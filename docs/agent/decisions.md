@@ -181,6 +181,29 @@ _Cross-reference: context.md — GDPR; workflows.md — Deployment → Environme
 
 ---
 
+## ADR-009: Sitemap alternates built from `routeSlugs`, not by `@astrojs/sitemap`
+
+**Date:** 2026-09-23
+
+**Status:** Copies the approach of the sibling project `astro-olandsstuguthyrning-com` (its ADR-018).
+
+**Context:** Search engines should get a sitemap with the `hreflang` cluster for every page. `@astrojs/sitemap` has an `i18n` option that pairs locales by matching the path after the locale prefix. That would work here today, because slugs are identical in both locales (ADR-007), but it breaks as soon as a slug is translated, and it doesn't emit `x-default`, which every page's `<head>` does. The sibling project found out the hard way that mismatched or asymmetric `hreflang` annotations can get the whole cluster ignored.
+
+**Decision:**
+
+- `@astrojs/sitemap` in `astro.config.mjs`, without its `i18n` option. A `serialize` hook adds each URL's alternates from `alternatePaths()` in `src/i18n/routes.ts`: every locale plus `x-default` → Swedish, the same set `alternateLinks()` gives `Layout.astro`.
+- `src/i18n/routes.ts` gained `localePath()`, `matchRoute()` and `alternatePaths()`, pure functions with no imports, so the config can read them before `astro:i18n` exists. Pages keep using `routeHref()`; the two must keep emitting the same paths, trailing slash included.
+- `public/robots.txt` allows everything and points at `/sitemap-index.xml`. The 404 page (which the plugin leaves out of the sitemap) stays out of search through its `noindex` meta tag, not through `Disallow`.
+
+**Consequences:**
+
+- A new route key or a page below a route needs a matching case in `matchRoute()`, or its sitemap entry silently loses its alternates. Translating a slug needs no sitemap change.
+- To check a build: every `<url>` in `dist/sitemap-0.xml` should list the same `hreflang`/`href` pairs as that page's `<link rel="alternate">` tags, and its `<loc>` should equal the page's canonical URL.
+
+_Cross-reference: architecture.md — Internationalization_
+
+---
+
 ## Anti-patterns
 
 - **Astro content collections for this site's content** — The content is small, typed inline, and tightly coupled to components. Content collections would add schema overhead and a content directory layer without meaningful benefit at this scale. Do not migrate to content collections unless the project grows significantly.

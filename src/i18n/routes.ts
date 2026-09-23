@@ -5,8 +5,8 @@
  * under `/en/` (`/en/about`). Slugs are the same in both locales so every URL
  * the SSR site served keeps working — GitHub Pages cannot redirect.
  *
- * This file imports nothing, so it stays safe to read from `astro.config.mjs`
- * should the config ever need the table (e.g. for sitemap alternates).
+ * This file imports nothing, which is what makes it safe to read from
+ * `astro.config.mjs` (the sitemap's `hreflang` alternates, ADR-009).
  */
 
 /** Order is the language switcher's display order (English flag first, as before). */
@@ -39,4 +39,62 @@ export const routeSlugs: Record<RouteKey, Record<Locale, string>> = {
 
 export function isLocale(value: string | undefined): value is Locale {
     return locales.includes(value as Locale);
+}
+
+/**
+ * Path for a route, built without `astro:i18n`.
+ *
+ * `routeHref()` in `./index.ts` is what pages use and stays the canonical
+ * helper — it goes through `getRelativeLocaleUrl`. This twin exists because
+ * `astro.config.mjs` needs the same paths while building the sitemap, and the
+ * config is evaluated before `astro:i18n` exists. Keep the two in agreement:
+ * both emit a trailing slash, matching what the build writes to disk.
+ */
+export function localePath(locale: Locale, key: RouteKey, param?: string): string {
+    const prefix = locale === defaultLocale ? '' : `/${locale}`;
+    const path = [routeSlugs[key][locale], param].filter(Boolean).join('/');
+    return path ? `${prefix}/${path}/` : `${prefix}/`;
+}
+
+/**
+ * The reverse: which route a built URL path belongs to, so the sitemap can pair
+ * `/about/` with `/en/about/`. Returns `null` for anything not produced by this
+ * site's routing table.
+ */
+export function matchRoute(pathname: string): { key: RouteKey; param?: string } | null {
+    const segments = pathname.split('/').filter(Boolean);
+    const [first, ...rest] = segments;
+
+    const locale = isLocale(first) ? first : defaultLocale;
+    const [segment, param, ...extra] = isLocale(first) ? rest : segments;
+
+    if (segment === undefined) return { key: 'home' };
+    if (extra.length > 0) return null;
+
+    for (const key of ['about', 'portfolio', 'privacy'] as const) {
+        if (routeSlugs[key][locale] !== segment) continue;
+        /* Only portfolio has pages below it (one per project). */
+        if (param === undefined) return { key };
+        return key === 'portfolio' ? { key, param } : null;
+    }
+
+    return null;
+}
+
+/**
+ * Every localized URL for the page at `pathname`, as `hreflang` → path, plus
+ * `x-default` → Swedish. Used by the sitemap's `serialize` hook; it mirrors
+ * what `alternateLinks()` gives the pages, so both advertise the same cluster.
+ */
+export function alternatePaths(pathname: string): { lang: string; path: string }[] {
+    const route = matchRoute(pathname);
+    if (!route) return [];
+
+    return [
+        ...locales.map((locale) => ({
+            lang: localeTags[locale],
+            path: localePath(locale, route.key, route.param)
+        })),
+        { lang: 'x-default', path: localePath(defaultLocale, route.key, route.param) }
+    ];
 }
