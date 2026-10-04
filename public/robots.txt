@@ -1,6 +1,8 @@
 # Crawling is allowed everywhere. The 404 page is kept out of search by a
 # `noindex` meta tag instead (src/layouts/Layout.astro) — blocking crawling here
 # would NOT prevent indexing, it would only stop Google reading the noindex.
+# The same goes for the /guildboard-v1/ mockup pages, which carry their own
+# `noindex, nofollow` meta tag.
 User-agent: *
 Disallow:
 

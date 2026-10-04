@@ -2,3 +2,6 @@
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# Self-contained mockup bundles, served as-is
+public/guildboard-v1/
