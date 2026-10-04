@@ -58,6 +58,8 @@ The 404 page is the one route without a `routeKey`. GitHub Pages serves the same
 
 v2 also has a review menu, `public/guildboard-v2/nav.js`: a list of every view, folded away with a button in the bottom-left corner. The open/closed choice is kept in `localStorage`. It is loaded by a `<script src="nav.js">` added at the end of each page's _bundled template_, not the raw HTML, because the bundle replaces the whole document after unpacking. It renders in a shadow root on `<html>`, so the mockup's CSS and the menu's can't affect each other. A new export of v2 needs that script tag re-added, and a new or renamed view needs updating in the menu's `GROUPS` list.
 
+v2's pages don't embed their images: they were moved out of each bundle's manifest into one shared `public/guildboard-v2/images/` folder (descriptive names; a founder avatar shared by two founders is named after the first, and an image used by several pages is stored once), and the templates point at them with relative `images/…` paths. Each page is ~0.6 MB, nearly all of it the fonts and scripts, which are still embedded. A new export of v2 embeds the images again, so extracting them is one more step to repeat.
+
 ## Component Hierarchy
 
 ```
